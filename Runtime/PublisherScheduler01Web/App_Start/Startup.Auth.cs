@@ -46,23 +46,23 @@ namespace PublisherScheduler01Web
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
             // Uncomment the following lines to enable logging in with third party login providers
-            //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
+            app.UseMicrosoftAccountAuthentication(
+                clientId: "bbba007f-faee-44e2-aa2c-dc294aadf7af",
+                clientSecret: "tpwAXDI^+_[mmkbHGN43738");
 
             //app.UseTwitterAuthentication(
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "625131004570801",
+               appSecret: "d1625eaff330a1186b0fcfcaceb2ed39");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "296823746154-cioelck66kohvdm7egi909fomr4f0b86.apps.googleusercontent.com",
+                ClientSecret = "C0eovBsWNCX-QoxY6edzU-xG"
+            });
         }
     }
 }
