@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace PublisherScheduler01Web.Models
@@ -8,6 +9,14 @@ namespace PublisherScheduler01Web.Models
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Name")]
+        public string PublisherName { get; set; }
+
+        public bool IsActive { get; set; }
+        public DateTime CreateDate { get; set; }
+
     }
 
     public class ExternalLoginListViewModel
