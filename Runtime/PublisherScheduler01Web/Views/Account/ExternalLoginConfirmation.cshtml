@@ -41,7 +41,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.CreateDate, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.DateTimeFor(m => m.CreateDate, DateTime.Now).Date()
+            @Html.TextBoxFor(m => m.CreateDate, "{0:yyyy-MM-dd}", new { @class = "dateInput", @placeholder = "Created Date" })
             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
         </div>
     </div>
