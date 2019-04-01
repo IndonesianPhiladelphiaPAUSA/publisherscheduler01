@@ -202,6 +202,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\PublisherScheduler01 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\scheduler1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -268,6 +269,12 @@
     <EmbeddedResource Include="Migrations\201901071054280_InitialCreate.resx">
       <DependentUpon>201901071054280_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PublisherScheduler01Data\PublisherScheduler01Data.csproj">
+      <Project>{13a343b3-e198-4c19-a507-37e908cfc01a}</Project>
+      <Name>PublisherScheduler01Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

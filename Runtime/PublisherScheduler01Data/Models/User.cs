@@ -13,5 +13,6 @@ namespace PublisherScheduler01Data.Models
         public bool IsActive { get; set; }
         public virtual ICollection<Role> Roles { get; set; }
         public virtual ICollection<Slot> Slots { get; set; }
+        public virtual ICollection<UserAvail> UserAvails { get; set; }
     }
 }
