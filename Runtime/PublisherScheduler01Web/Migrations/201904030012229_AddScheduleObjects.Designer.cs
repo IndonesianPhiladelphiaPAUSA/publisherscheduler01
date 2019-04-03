@@ -7,13 +7,13 @@ namespace PublisherScheduler01Web.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class AddSchedulerObjects : IMigrationMetadata
+    public sealed partial class AddScheduleObjects : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddSchedulerObjects));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddScheduleObjects));
         
         string IMigrationMetadata.Id
         {
-            get { return "201904022047581_AddSchedulerObjects"; }
+            get { return "201904030012229_AddScheduleObjects"; }
         }
         
         string IMigrationMetadata.Source

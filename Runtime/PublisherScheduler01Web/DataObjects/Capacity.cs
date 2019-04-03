@@ -8,6 +8,6 @@ namespace PublisherScheduler01Web.DataObjects
         public string Name { get; set; }
 
         public virtual ICollection<Person> Persons { get; set; }
-        public virtual ICollection<Assignment> Assignments { get; set; }
+        public virtual ICollection<TaskType> TaskTypes { get; set; }
     }
 }

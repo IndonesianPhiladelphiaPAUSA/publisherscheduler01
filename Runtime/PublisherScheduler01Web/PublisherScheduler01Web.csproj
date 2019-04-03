@@ -223,13 +223,20 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\Startup.MobileApp.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AssignmentController.cs" />
+    <Compile Include="Controllers\CapacityController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PersonAvailController.cs" />
+    <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="Controllers\SlotController.cs" />
+    <Compile Include="Controllers\TaskTypeController.cs" />
     <Compile Include="DataObjects\Location.cs" />
     <Compile Include="DataObjects\Capacity.cs" />
     <Compile Include="DataObjects\Slot.cs" />
+    <Compile Include="DataObjects\TaskType.cs" />
     <Compile Include="DataObjects\Assignment.cs" />
-    <Compile Include="DataObjects\SlotFill.cs" />
     <Compile Include="DataObjects\Person.cs" />
     <Compile Include="DataObjects\PersonAvail.cs" />
     <Compile Include="Global.asax.cs">
@@ -239,9 +246,9 @@
     <Compile Include="Migrations\201904021719586_Initial.Designer.cs">
       <DependentUpon>201904021719586_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201904022047581_AddSchedulerObjects.cs" />
-    <Compile Include="Migrations\201904022047581_AddSchedulerObjects.Designer.cs">
-      <DependentUpon>201904022047581_AddSchedulerObjects.cs</DependentUpon>
+    <Compile Include="Migrations\201904030012229_AddScheduleObjects.cs" />
+    <Compile Include="Migrations\201904030012229_AddScheduleObjects.Designer.cs">
+      <DependentUpon>201904030012229_AddScheduleObjects.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -308,6 +315,41 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Person\Create.cshtml" />
+    <Content Include="Views\Person\Delete.cshtml" />
+    <Content Include="Views\Person\Details.cshtml" />
+    <Content Include="Views\Person\Edit.cshtml" />
+    <Content Include="Views\Person\Index.cshtml" />
+    <Content Include="Views\Capacity\Create.cshtml" />
+    <Content Include="Views\Capacity\Delete.cshtml" />
+    <Content Include="Views\Capacity\Details.cshtml" />
+    <Content Include="Views\Capacity\Edit.cshtml" />
+    <Content Include="Views\Capacity\Index.cshtml" />
+    <Content Include="Views\PersonAvail\Create.cshtml" />
+    <Content Include="Views\PersonAvail\Delete.cshtml" />
+    <Content Include="Views\PersonAvail\Details.cshtml" />
+    <Content Include="Views\PersonAvail\Edit.cshtml" />
+    <Content Include="Views\PersonAvail\Index.cshtml" />
+    <Content Include="Views\Location\Create.cshtml" />
+    <Content Include="Views\Location\Delete.cshtml" />
+    <Content Include="Views\Location\Details.cshtml" />
+    <Content Include="Views\Location\Edit.cshtml" />
+    <Content Include="Views\Location\Index.cshtml" />
+    <Content Include="Views\TaskType\Create.cshtml" />
+    <Content Include="Views\TaskType\Delete.cshtml" />
+    <Content Include="Views\TaskType\Details.cshtml" />
+    <Content Include="Views\TaskType\Edit.cshtml" />
+    <Content Include="Views\TaskType\Index.cshtml" />
+    <Content Include="Views\Slot\Create.cshtml" />
+    <Content Include="Views\Slot\Delete.cshtml" />
+    <Content Include="Views\Slot\Details.cshtml" />
+    <Content Include="Views\Slot\Edit.cshtml" />
+    <Content Include="Views\Slot\Index.cshtml" />
+    <Content Include="Views\Assignment\Create.cshtml" />
+    <Content Include="Views\Assignment\Delete.cshtml" />
+    <Content Include="Views\Assignment\Details.cshtml" />
+    <Content Include="Views\Assignment\Edit.cshtml" />
+    <Content Include="Views\Assignment\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -329,8 +371,8 @@
     <EmbeddedResource Include="Migrations\201904021719586_Initial.resx">
       <DependentUpon>201904021719586_Initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904022047581_AddSchedulerObjects.resx">
-      <DependentUpon>201904022047581_AddSchedulerObjects.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904030012229_AddScheduleObjects.resx">
+      <DependentUpon>201904030012229_AddScheduleObjects.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

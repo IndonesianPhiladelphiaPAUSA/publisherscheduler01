@@ -21,8 +21,6 @@ namespace PublisherScheduler01Web.Migrations
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
-            Debugger.Launch();
-
             var capacities = new List<Capacity>
             {
                 new Capacity{Name="Elder"},
@@ -35,22 +33,22 @@ namespace PublisherScheduler01Web.Migrations
             capacities.ForEach(c => context.Capacities.Add(c));
             context.SaveChanges();
 
-            var assignments = new List<Assignment>
+            var tasktypes = new List<TaskType>
             {
-                new Assignment
+                new TaskType
                 {
                     Name = "Publisher",
                     IsActive = true,
                     Capacities = (List<Capacity>)capacities.Where(c => (new List<string>() { "Elder", "MS", "Brother", "Sister", "Pioneer", "Publisher" }).Contains(c.Name)).ToList()
                 },
-                new Assignment
+                new TaskType
                 {
                     Name = "Captain",
                     IsActive = true,
                     Capacities = (List<Capacity>)capacities.Where(c => (new List<string>() { "Elder", "MS", "Brother" }).Contains(c.Name)).ToList()
                 }
             };
-            assignments.ForEach(a => context.Assignments.Add(a));
+            tasktypes.ForEach(a => context.TaskTypes.Add(a));
             context.SaveChanges();
 
             var locations = new List<Location>
@@ -132,24 +130,24 @@ namespace PublisherScheduler01Web.Migrations
             personAvails.ForEach(p => context.PersonAvails.Add(p));
             context.SaveChanges();
 
-            var slotFills = new List<SlotFill>
+            var assignments = new List<Assignment>
             {
-                new SlotFill{
+                new Assignment{
                     SlotId = slots.Where(s => 
                             (s.LocationId == locations.Where(l => l.Name == "One Stop Market").ToList()[0].Id && 
                              s.Begin.DayOfWeek.Equals(DayOfWeek.Wednesday))
                             ).ToList()[0].Id,
-                    AssignmentId = assignments.Where(a => a.Name == "Captain").ToList()[0].Id,
+                    TaskTypeId = tasktypes.Where(a => a.Name == "Captain").ToList()[0].Id,
                     PersonId = persons.Where(p => p.Name == "Peter Subianto").ToList()[0].Id},
-                new SlotFill{
+                new Assignment{
                     SlotId = slots.Where(s =>
                             (s.LocationId == locations.Where(l => l.Name == "One Stop Market").ToList()[0].Id &&
                              s.Begin.DayOfWeek.Equals(DayOfWeek.Wednesday))
                             ).ToList()[0].Id,
-                    AssignmentId = assignments.Where(a => a.Name == "Publisher").ToList()[0].Id,
+                    TaskTypeId = tasktypes.Where(a => a.Name == "Publisher").ToList()[0].Id,
                     PersonId = persons.Where(p => p.Name == "Keith Floyd").ToList()[0].Id}
             };
-            slotFills.ForEach(s => context.SlotFills.Add(s));
+            assignments.ForEach(s => context.Assignments.Add(s));
             context.SaveChanges();
         }
     }

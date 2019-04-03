@@ -37,8 +37,8 @@ namespace PublisherScheduler01Web.Models
         public DbSet<Capacity> Capacities { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Slot> Slots { get; set; }
-        public DbSet<SlotFill> SlotFills { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
+        public DbSet<TaskType> TaskTypes { get; set; }
         public DbSet<PersonAvail> PersonAvails { get; set; }
 
         public static ApplicationDbContext Create()

@@ -11,6 +11,6 @@ namespace PublisherScheduler01Web.DataObjects
         public int? LocationId { get; set; }
         public bool IsActive { get; set; }
 
-        public virtual ICollection<SlotFill> SlotFills { get; set; }
+        public virtual ICollection<Assignment> Assignments { get; set; }
     }
 }

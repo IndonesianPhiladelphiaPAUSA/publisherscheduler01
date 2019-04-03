@@ -3,7 +3,7 @@ namespace PublisherScheduler01Web.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AddSchedulerObjects : DbMigration
+    public partial class AddScheduleObjects : DbMigration
     {
         public override void Up()
         {
@@ -12,10 +12,17 @@ namespace PublisherScheduler01Web.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                        IsActive = c.Boolean(nullable: false),
+                        SlotId = c.Int(nullable: false),
+                        TaskTypeId = c.Int(nullable: false),
+                        PersonId = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Person", t => t.PersonId, cascadeDelete: true)
+                .ForeignKey("dbo.TaskType", t => t.TaskTypeId, cascadeDelete: true)
+                .ForeignKey("dbo.Slot", t => t.SlotId, cascadeDelete: true)
+                .Index(t => t.SlotId)
+                .Index(t => t.TaskTypeId)
+                .Index(t => t.PersonId);
             
             CreateTable(
                 "dbo.Capacity",
@@ -52,21 +59,14 @@ namespace PublisherScheduler01Web.Migrations
                 .Index(t => t.Person_Id);
             
             CreateTable(
-                "dbo.SlotFill",
+                "dbo.TaskType",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        SlotId = c.Int(nullable: false),
-                        AssignmentId = c.Int(nullable: false),
-                        PersonId = c.Int(nullable: false),
+                        Name = c.String(),
+                        IsActive = c.Boolean(nullable: false),
                     })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Person", t => t.PersonId, cascadeDelete: true)
-                .ForeignKey("dbo.Assignment", t => t.AssignmentId, cascadeDelete: true)
-                .ForeignKey("dbo.Slot", t => t.SlotId, cascadeDelete: true)
-                .Index(t => t.SlotId)
-                .Index(t => t.AssignmentId)
-                .Index(t => t.PersonId);
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.Location",
@@ -93,19 +93,6 @@ namespace PublisherScheduler01Web.Migrations
                 .Index(t => t.LocationId);
             
             CreateTable(
-                "dbo.CapacityAssignment",
-                c => new
-                    {
-                        Capacity_Id = c.Int(nullable: false),
-                        Assignment_Id = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => new { t.Capacity_Id, t.Assignment_Id })
-                .ForeignKey("dbo.Capacity", t => t.Capacity_Id, cascadeDelete: true)
-                .ForeignKey("dbo.Assignment", t => t.Assignment_Id, cascadeDelete: true)
-                .Index(t => t.Capacity_Id)
-                .Index(t => t.Assignment_Id);
-            
-            CreateTable(
                 "dbo.PersonCapacity",
                 c => new
                     {
@@ -118,33 +105,46 @@ namespace PublisherScheduler01Web.Migrations
                 .Index(t => t.Person_Id)
                 .Index(t => t.Capacity_Id);
             
+            CreateTable(
+                "dbo.TaskTypeCapacity",
+                c => new
+                    {
+                        TaskType_Id = c.Int(nullable: false),
+                        Capacity_Id = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.TaskType_Id, t.Capacity_Id })
+                .ForeignKey("dbo.TaskType", t => t.TaskType_Id, cascadeDelete: true)
+                .ForeignKey("dbo.Capacity", t => t.Capacity_Id, cascadeDelete: true)
+                .Index(t => t.TaskType_Id)
+                .Index(t => t.Capacity_Id);
+            
         }
         
         public override void Down()
         {
             DropForeignKey("dbo.Slot", "LocationId", "dbo.Location");
-            DropForeignKey("dbo.SlotFill", "SlotId", "dbo.Slot");
-            DropForeignKey("dbo.SlotFill", "AssignmentId", "dbo.Assignment");
-            DropForeignKey("dbo.SlotFill", "PersonId", "dbo.Person");
+            DropForeignKey("dbo.Assignment", "SlotId", "dbo.Slot");
+            DropForeignKey("dbo.TaskTypeCapacity", "Capacity_Id", "dbo.Capacity");
+            DropForeignKey("dbo.TaskTypeCapacity", "TaskType_Id", "dbo.TaskType");
+            DropForeignKey("dbo.Assignment", "TaskTypeId", "dbo.TaskType");
             DropForeignKey("dbo.PersonAvail", "Person_Id", "dbo.Person");
             DropForeignKey("dbo.PersonCapacity", "Capacity_Id", "dbo.Capacity");
             DropForeignKey("dbo.PersonCapacity", "Person_Id", "dbo.Person");
-            DropForeignKey("dbo.CapacityAssignment", "Assignment_Id", "dbo.Assignment");
-            DropForeignKey("dbo.CapacityAssignment", "Capacity_Id", "dbo.Capacity");
+            DropForeignKey("dbo.Assignment", "PersonId", "dbo.Person");
+            DropIndex("dbo.TaskTypeCapacity", new[] { "Capacity_Id" });
+            DropIndex("dbo.TaskTypeCapacity", new[] { "TaskType_Id" });
             DropIndex("dbo.PersonCapacity", new[] { "Capacity_Id" });
             DropIndex("dbo.PersonCapacity", new[] { "Person_Id" });
-            DropIndex("dbo.CapacityAssignment", new[] { "Assignment_Id" });
-            DropIndex("dbo.CapacityAssignment", new[] { "Capacity_Id" });
             DropIndex("dbo.Slot", new[] { "LocationId" });
-            DropIndex("dbo.SlotFill", new[] { "PersonId" });
-            DropIndex("dbo.SlotFill", new[] { "AssignmentId" });
-            DropIndex("dbo.SlotFill", new[] { "SlotId" });
             DropIndex("dbo.PersonAvail", new[] { "Person_Id" });
+            DropIndex("dbo.Assignment", new[] { "PersonId" });
+            DropIndex("dbo.Assignment", new[] { "TaskTypeId" });
+            DropIndex("dbo.Assignment", new[] { "SlotId" });
+            DropTable("dbo.TaskTypeCapacity");
             DropTable("dbo.PersonCapacity");
-            DropTable("dbo.CapacityAssignment");
             DropTable("dbo.Slot");
             DropTable("dbo.Location");
-            DropTable("dbo.SlotFill");
+            DropTable("dbo.TaskType");
             DropTable("dbo.PersonAvail");
             DropTable("dbo.Person");
             DropTable("dbo.Capacity");
