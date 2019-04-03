@@ -9,6 +9,7 @@ namespace PublisherScheduler01Web
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
+            // ConfigureMobileApp(app);
         }
     }
 }
