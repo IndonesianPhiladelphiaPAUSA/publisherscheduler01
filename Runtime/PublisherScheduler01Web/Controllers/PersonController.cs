@@ -6,20 +6,27 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using PublisherScheduler01Web.Repositories;
 using PublisherScheduler01Web.DataObjects;
 using PublisherScheduler01Web.Models;
+using PublisherScheduler01Web.ViewModels.Person;
 
 namespace PublisherScheduler01Web.Controllers
 {
     [Authorize]
     public class PersonController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ISchedulerRepository _repository;
 
+        public PersonController(ISchedulerRepository repository)
+        {
+            _repository = repository;
+        }
+        
         // GET: Person
         public ActionResult Index()
         {
-            return View(db.Persons.ToList());
+            return View(_repository.GetPersons());
         }
 
         // GET: Person/Details/5
@@ -29,7 +36,7 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Person person = db.Persons.Find(id);
+            Person person = _repository.GetPersonById(id);
             if (person == null)
             {
                 return HttpNotFound();
@@ -52,8 +59,7 @@ namespace PublisherScheduler01Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Persons.Add(person);
-                db.SaveChanges();
+                _repository.CreatePerson(person);
                 return RedirectToAction("Index");
             }
 
@@ -67,12 +73,14 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Person person = db.Persons.Find(id);
+            Person person = _repository.GetPersonById(id);
             if (person == null)
             {
                 return HttpNotFound();
             }
-            return View(person);
+            PersonEditViewModel personEditViewModel = new PersonEditViewModel(_repository) { PersonDetail = person };
+
+            return View(personEditViewModel);
         }
 
         // POST: Person/Edit/5
@@ -84,8 +92,7 @@ namespace PublisherScheduler01Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(person).State = EntityState.Modified;
-                db.SaveChanges();
+                _repository.PersonSaveChanges(person);
                 return RedirectToAction("Index");
             }
             return View(person);
@@ -98,7 +105,7 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Person person = db.Persons.Find(id);
+            Person person = _repository.GetPersonById(id);
             if (person == null)
             {
                 return HttpNotFound();
@@ -111,19 +118,19 @@ namespace PublisherScheduler01Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Person person = db.Persons.Find(id);
-            db.Persons.Remove(person);
-            db.SaveChanges();
+            _repository.DeletePerson(id);
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
             base.Dispose(disposing);
+        }
+
+        private void PopulateRolesDropDownList(int? selectedRole = null)
+        {
+            var roles = _repository.PopulateRolesDropDownList();
+            ViewBag.RoleId = new SelectList(roles.AsNoTracking(), "RoleId", "RoleName", selectedRole);
         }
     }
 }

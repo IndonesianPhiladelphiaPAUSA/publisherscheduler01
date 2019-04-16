@@ -8,18 +8,26 @@ using System.Web;
 using System.Web.Mvc;
 using PublisherScheduler01Web.DataObjects;
 using PublisherScheduler01Web.Models;
+using PublisherScheduler01Web.Repositories;
 
 namespace PublisherScheduler01Web.Controllers
 {
     [Authorize]
     public class AssignmentController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        ISchedulerRepository _repository;
+
+        public AssignmentController(ISchedulerRepository repository)
+        {
+            _repository = repository;
+        }
 
         // GET: Assignment
         public ActionResult Index()
         {
-            return View(db.Assignments.ToList());
+            IEnumerable<Assignment> allItems = _repository.GetAssignments();
+
+            return View(allItems);
         }
 
         // GET: Assignment/Details/5
@@ -29,7 +37,7 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Assignment assignment = db.Assignments.Find(id);
+            Assignment assignment = _repository.GetAssignmentById(id);
             if (assignment == null)
             {
                 return HttpNotFound();
@@ -52,8 +60,6 @@ namespace PublisherScheduler01Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Assignments.Add(assignment);
-                db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -67,7 +73,7 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Assignment assignment = db.Assignments.Find(id);
+            Assignment assignment = _repository.GetAssignmentById(id);
             if (assignment == null)
             {
                 return HttpNotFound();
@@ -84,8 +90,7 @@ namespace PublisherScheduler01Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(assignment).State = EntityState.Modified;
-                db.SaveChanges();
+                _repository.AssignmentSaveChanges(assignment);
                 return RedirectToAction("Index");
             }
             return View(assignment);
@@ -98,7 +103,7 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Assignment assignment = db.Assignments.Find(id);
+            Assignment assignment = _repository.GetAssignmentById(id);
             if (assignment == null)
             {
                 return HttpNotFound();
@@ -111,18 +116,12 @@ namespace PublisherScheduler01Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Assignment assignment = db.Assignments.Find(id);
-            db.Assignments.Remove(assignment);
-            db.SaveChanges();
+            _repository.DeleteAssignment(id);
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
             base.Dispose(disposing);
         }
     }

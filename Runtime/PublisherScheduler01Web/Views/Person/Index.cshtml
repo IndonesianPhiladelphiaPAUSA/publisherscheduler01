@@ -15,6 +15,9 @@
             @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
+            Roles
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.IsActive)
         </th>
         <th></th>
@@ -24,6 +27,20 @@
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            <div>
+                <table>
+                    @foreach (var role in item.Capacities)
+                    {
+                        <tr>
+                            <td>
+                                @role.Name
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.IsActive)
