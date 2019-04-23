@@ -1,0 +1,49 @@
+﻿@model PublisherScheduler01Web.ViewModels.PersonViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Person</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonDetail.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PersonDetail.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonDetail.Capacities)
+        </dt>
+
+        <dd>
+            <table>
+                @foreach (string role in Model.RoleNamesSelected)
+                {
+                    <div>
+                        @role.ToString()
+                    </div>
+                }
+            </table>
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonDetail.IsActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PersonDetail.IsActive)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PersonDetail.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

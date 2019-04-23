@@ -1,0 +1,50 @@
+﻿@model PublisherScheduler01Web.ViewModels.SlotViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Slot</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SlotDetail.Begin)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SlotDetail.Begin, "{0:dd/MM/yyyy hh:mm tt}")
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SlotDetail.End)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SlotDetail.End, "{0:dd/MM/yyyy hh:mm tt}")
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LocationName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LocationName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SlotDetail.IsActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SlotDetail.IsActive)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.SlotDetail.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

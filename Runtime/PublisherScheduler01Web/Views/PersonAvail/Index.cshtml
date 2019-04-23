@@ -1,0 +1,51 @@
+﻿@model IEnumerable<PublisherScheduler01Web.ViewModels.PersonAvailViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PersonName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PersonAvailDetail.Begin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PersonAvailDetail.End)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PersonAvailDetail.IsAvailable)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PersonName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PersonAvailDetail.Begin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PersonAvailDetail.End)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PersonAvailDetail.IsAvailable)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.PersonAvailDetail.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.PersonAvailDetail.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.PersonAvailDetail.Id })
+        </td>
+    </tr>
+}
+
+</table>
