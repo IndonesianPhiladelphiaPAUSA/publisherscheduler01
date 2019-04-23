@@ -265,6 +265,10 @@
     <Compile Include="Migrations\201904152327507_AddingAttributes.Designer.cs">
       <DependentUpon>201904152327507_AddingAttributes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904231422138_AddDataAnnotations.cs" />
+    <Compile Include="Migrations\201904231422138_AddDataAnnotations.Designer.cs">
+      <DependentUpon>201904231422138_AddDataAnnotations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -273,7 +277,10 @@
     <Compile Include="Repositories\ISchedulerRepository.cs" />
     <Compile Include="Repositories\SchedulerEdmRepository.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\Person\PersonEditViewModel.cs" />
+    <Compile Include="ViewModels\AssignmentViewModel.cs" />
+    <Compile Include="ViewModels\PersonAvailViewModel.cs" />
+    <Compile Include="ViewModels\PersonViewModel.cs" />
+    <Compile Include="ViewModels\SlotViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -394,6 +401,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904152327507_AddingAttributes.resx">
       <DependentUpon>201904152327507_AddingAttributes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904231422138_AddDataAnnotations.resx">
+      <DependentUpon>201904231422138_AddDataAnnotations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

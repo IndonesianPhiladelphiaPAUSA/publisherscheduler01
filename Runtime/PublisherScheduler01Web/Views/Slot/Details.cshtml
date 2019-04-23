@@ -1,4 +1,4 @@
-﻿@model PublisherScheduler01Web.DataObjects.Slot
+﻿@model PublisherScheduler01Web.ViewModels.SlotViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -11,40 +11,40 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Begin)
+            @Html.DisplayNameFor(model => model.SlotDetail.Begin)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Begin)
+            @Html.DisplayFor(model => model.SlotDetail.Begin, "{0:dd/MM/yyyy hh:mm tt}")
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.End)
+            @Html.DisplayNameFor(model => model.SlotDetail.End)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.End)
+            @Html.DisplayFor(model => model.SlotDetail.End, "{0:dd/MM/yyyy hh:mm tt}")
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.LocationId)
+            @Html.DisplayNameFor(model => model.LocationName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.LocationId)
+            @Html.DisplayFor(model => model.LocationName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.IsActive)
+            @Html.DisplayNameFor(model => model.SlotDetail.IsActive)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.IsActive)
+            @Html.DisplayFor(model => model.SlotDetail.IsActive)
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.SlotDetail.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

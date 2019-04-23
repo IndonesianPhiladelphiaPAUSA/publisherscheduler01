@@ -8,18 +8,36 @@ using System.Web;
 using System.Web.Mvc;
 using PublisherScheduler01Web.DataObjects;
 using PublisherScheduler01Web.Models;
+using PublisherScheduler01Web.Repositories;
+using PublisherScheduler01Web.ViewModels;
 
 namespace PublisherScheduler01Web.Controllers
 {
     [Authorize]
     public class SlotController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ISchedulerRepository _repository;
+
+        public SlotController(ISchedulerRepository repository)
+        {
+            _repository = repository;
+        }
 
         // GET: Slot
         public ActionResult Index()
         {
-            return View(db.Slots.ToList());
+            IList<SlotViewModel> slotsVm = new List<SlotViewModel>();
+
+            foreach (Slot s in _repository.GetSlots().ToList())
+            {
+                slotsVm.Add(new ViewModels.SlotViewModel()
+                {
+                    SlotDetail = s,
+                    LocationName = _repository.GetLocationById(s.Id) == null ? "" : _repository.GetLocationById(s.Id).Name 
+                });
+            }
+
+            return View(slotsVm);
         }
 
         // GET: Slot/Details/5
@@ -29,12 +47,15 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Slot slot = db.Slots.Find(id);
+            Slot slot = _repository.GetSlotById(id);
             if (slot == null)
             {
                 return HttpNotFound();
             }
-            return View(slot);
+            SlotViewModel slotVm = new SlotViewModel();
+            slotVm.SlotDetail = slot;
+            slotVm.LocationName = _repository.GetLocationById(slot.Id).Name;
+            return View(slotVm);
         }
 
         // GET: Slot/Create
@@ -52,8 +73,7 @@ namespace PublisherScheduler01Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Slots.Add(slot);
-                db.SaveChanges();
+                _repository.CreateSlot(slot);
                 return RedirectToAction("Index");
             }
 
@@ -67,7 +87,7 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Slot slot = db.Slots.Find(id);
+            Slot slot = _repository.GetSlotById(id);
             if (slot == null)
             {
                 return HttpNotFound();
@@ -84,8 +104,7 @@ namespace PublisherScheduler01Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(slot).State = EntityState.Modified;
-                db.SaveChanges();
+                _repository.SlotSaveChanges(slot);
                 return RedirectToAction("Index");
             }
             return View(slot);
@@ -98,7 +117,7 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Slot slot = db.Slots.Find(id);
+            Slot slot = _repository.GetSlotById(id);
             if (slot == null)
             {
                 return HttpNotFound();
@@ -111,19 +130,14 @@ namespace PublisherScheduler01Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Slot slot = db.Slots.Find(id);
-            db.Slots.Remove(slot);
-            db.SaveChanges();
+            _repository.DeleteSlot(id);
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
             base.Dispose(disposing);
         }
+
     }
 }

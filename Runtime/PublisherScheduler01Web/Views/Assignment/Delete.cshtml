@@ -1,4 +1,4 @@
-﻿@model PublisherScheduler01Web.DataObjects.Assignment
+﻿@model PublisherScheduler01Web.ViewModels.AssignmentViewModel
 
 @{
     ViewBag.Title = "Delete";
@@ -12,27 +12,27 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.SlotId)
+            @Html.DisplayNameFor(model => model.SlotSelected)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.SlotId)
+            @Html.DisplayFor(model => model.SlotSelected)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TaskTypeId)
+            @Html.DisplayNameFor(model => model.TaskTypeSelected)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.TaskTypeId)
+            @Html.DisplayFor(model => model.TaskTypeSelected)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PersonId)
+            @Html.DisplayNameFor(model => model.PersonSelected)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.PersonId)
+            @Html.DisplayFor(model => model.PersonSelected)
         </dd>
 
     </dl>

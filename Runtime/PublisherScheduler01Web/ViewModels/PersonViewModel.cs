@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PublisherScheduler01Web.DataObjects;
 using PublisherScheduler01Web.Repositories;
 
-namespace PublisherScheduler01Web.ViewModels.Person
+namespace PublisherScheduler01Web.ViewModels
 {
-    public class PersonEditViewModel
+    public class PersonViewModel
     {
         ISchedulerRepository _repository;
 
-        public PersonEditViewModel(ISchedulerRepository repository)
+        public PersonViewModel(ISchedulerRepository repository)
         {
             _repository = repository;
         }
 
-        public DataObjects.Person PersonDetail { get; set; }
+        public Person PersonDetail { get; set; }
 
         public string[] RolesSelected
         {
@@ -24,9 +25,28 @@ namespace PublisherScheduler01Web.ViewModels.Person
             {
                 List<string> roles = new List<string>();
 
-                foreach(var role in PersonDetail.Capacities)
+                if (PersonDetail.Capacities != null)
                 {
-                    roles.Add(role.Id.ToString());
+                    foreach (var role in PersonDetail.Capacities)
+                    {
+                        int? id = role.Id;
+                        roles.Add(id == null ? "" : role.Id.ToString());
+                    }
+                }
+
+                return roles.ToArray();
+            }
+        }
+
+        public string[] RoleNamesSelected
+        {
+            get
+            {
+                List<string> roles = new List<string>();
+
+                foreach (var role in PersonDetail.Capacities)
+                {
+                    roles.Add(role.Name);
                 }
 
                 return roles.ToArray();

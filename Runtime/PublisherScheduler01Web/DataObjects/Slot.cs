@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace PublisherScheduler01Web.DataObjects
@@ -8,6 +9,10 @@ namespace PublisherScheduler01Web.DataObjects
     {
         [Key]
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "Please enter description")]
+        [Display(Description = "Name: ")]
+        public string Name { get; set; }
 
         [DataType(DataType.DateTime)]
         public DateTime Begin { get; set; }

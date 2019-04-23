@@ -59,9 +59,11 @@ namespace PublisherScheduler01Web.Repositories
         void TaskTypeSaveChanges(TaskType taskType);
 
 
-        IQueryable<Location> PopulateLocationDropDownList();
-        IQueryable<TaskType> PopulateTaskTypeDropDownList();
+        IQueryable<Location> PopulateLocationsDropDownList();
+        IQueryable<TaskType> PopulateTaskTypesDropDownList();
         IQueryable<Capacity> PopulateRolesDropDownList();
+        IQueryable<Slot> PopulateSlotsDropDownList();
+        IQueryable<Person> PopulatePersonsDropDownList();
 
     }
 }

@@ -213,20 +213,23 @@ namespace PublisherScheduler01Web.Repositories
 
         public void LocationSaveChanges(Location location)
         {
-            throw new NotImplementedException();
+            db.Entry(location).State = EntityState.Modified;
+            db.SaveChanges();
         }
 
         public void PersonAvailabilitySaveChanges(PersonAvail personAvail)
         {
-            throw new NotImplementedException();
+            db.Entry(personAvail).State = EntityState.Modified;
+            db.SaveChanges();
         }
 
         public void PersonSaveChanges(Person person)
         {
-            throw new NotImplementedException();
+            db.Entry(person).State = EntityState.Modified;
+            db.SaveChanges();
         }
 
-        public IQueryable<Location> PopulateLocationDropDownList()
+        public IQueryable<Location> PopulateLocationsDropDownList()
         {
             return db.Locations.OrderBy(l => l.Name);
         }
@@ -236,24 +239,39 @@ namespace PublisherScheduler01Web.Repositories
             return db.Capacities.OrderBy(c => c.Name);
         }
 
-        public IQueryable<TaskType> PopulateTaskTypeDropDownList()
+        public IQueryable<Slot> PopulateSlotsDropDownList()
+        {
+            return db.Slots.OrderBy(c => c.Name);
+        }
+
+        public IQueryable<Person> PopulatePersonsDropDownList()
+        {
+            return db.Persons.OrderBy(c => c.Name);
+        }
+
+        public IQueryable<TaskType> PopulateTaskTypesDropDownList()
         {
             return db.TaskTypes.OrderBy(t => t.Name);
         }
 
         public void RoleSaveChanges(Capacity capacity)
         {
-            throw new NotImplementedException();
+            db.Entry(capacity).State = EntityState.Modified;
+            db.SaveChanges();
         }
 
         public void SlotSaveChanges(Slot slot)
         {
-            throw new NotImplementedException();
+            db.Entry(slot).State = EntityState.Modified;
+            db.SaveChanges();
+
         }
 
         public void TaskTypeSaveChanges(TaskType taskType)
         {
-            throw new NotImplementedException();
+            db.Entry(taskType).State = EntityState.Modified;
+            db.SaveChanges();
         }
+
     }
 }

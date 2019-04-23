@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using PublisherScheduler01Web.DataObjects;
 using PublisherScheduler01Web.Models;
 using PublisherScheduler01Web.Repositories;
+using PublisherScheduler01Web.ViewModels;
 
 namespace PublisherScheduler01Web.Controllers
 {
@@ -25,9 +26,17 @@ namespace PublisherScheduler01Web.Controllers
         // GET: Assignment
         public ActionResult Index()
         {
-            IEnumerable<Assignment> allItems = _repository.GetAssignments();
+            IList<AssignmentViewModel> assignmentsVm = new List<AssignmentViewModel>();
 
-            return View(allItems);
+            foreach (Assignment a in _repository.GetAssignments())
+            {
+                assignmentsVm.Add(new AssignmentViewModel(_repository)
+                {
+                    AssignmentDetail = a,
+                });
+            }
+
+            return View(assignmentsVm);
         }
 
         // GET: Assignment/Details/5
@@ -42,7 +51,10 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return HttpNotFound();
             }
-            return View(assignment);
+
+            AssignmentViewModel assignmentViewModel = new AssignmentViewModel(_repository) { AssignmentDetail = assignment };
+
+            return View(assignmentViewModel);
         }
 
         // GET: Assignment/Create
@@ -60,10 +72,13 @@ namespace PublisherScheduler01Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                _repository.CreateAssignment(assignment);
                 return RedirectToAction("Index");
             }
 
-            return View(assignment);
+            AssignmentViewModel assignmentViewModel = new AssignmentViewModel(_repository) { AssignmentDetail = assignment };
+
+            return View(assignmentViewModel);
         }
 
         // GET: Assignment/Edit/5
@@ -78,7 +93,9 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return HttpNotFound();
             }
-            return View(assignment);
+            AssignmentViewModel assignmentViewModel = new AssignmentViewModel(_repository) { AssignmentDetail = assignment };
+
+            return View(assignmentViewModel);
         }
 
         // POST: Assignment/Edit/5
@@ -93,7 +110,9 @@ namespace PublisherScheduler01Web.Controllers
                 _repository.AssignmentSaveChanges(assignment);
                 return RedirectToAction("Index");
             }
-            return View(assignment);
+            AssignmentViewModel assignmentViewModel = new AssignmentViewModel(_repository) { AssignmentDetail = assignment };
+
+            return View(assignmentViewModel);
         }
 
         // GET: Assignment/Delete/5
@@ -108,7 +127,9 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return HttpNotFound();
             }
-            return View(assignment);
+            AssignmentViewModel assignmentViewModel = new AssignmentViewModel(_repository) { AssignmentDetail = assignment };
+
+            return View(assignmentViewModel);
         }
 
         // POST: Assignment/Delete/5
@@ -123,6 +144,24 @@ namespace PublisherScheduler01Web.Controllers
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
+        }
+
+        private void PopulateSlotsDropDownList(int? selectedSlot = null)
+        {
+            var slots = _repository.PopulateSlotsDropDownList();
+            ViewBag.RoleId = new SelectList(slots.AsNoTracking(), "SlotId", "SlotName", selectedSlot);
+        }
+
+        private void PopulateTaskTypesDropDownList(int? selectedTaskType = null)
+        {
+            var taskTypes = _repository.PopulateTaskTypesDropDownList();
+            ViewBag.RoleId = new SelectList(taskTypes.AsNoTracking(), "TaskTypeId", "TaskTypeName", selectedTaskType);
+        }
+
+        private void PopulatePersonsDropDownList(int? selectedPerson = null)
+        {
+            var persons = _repository.PopulateTaskTypesDropDownList();
+            ViewBag.RoleId = new SelectList(persons.AsNoTracking(), "PersonId", "PersonName", selectedPerson);
         }
     }
 }

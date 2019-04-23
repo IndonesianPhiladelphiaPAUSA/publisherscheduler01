@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using PublisherScheduler01Web.Repositories;
 using PublisherScheduler01Web.DataObjects;
 using PublisherScheduler01Web.Models;
-using PublisherScheduler01Web.ViewModels.Person;
+using PublisherScheduler01Web.ViewModels;
 
 namespace PublisherScheduler01Web.Controllers
 {
@@ -41,15 +41,26 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return HttpNotFound();
             }
-            return View(person);
+
+            PersonViewModel personViewModel = new PersonViewModel(_repository) { PersonDetail = person };
+
+            return View(personViewModel);
+
         }
 
         // GET: Person/Create
         public ActionResult Create()
         {
-            return View();
-        }
+            Person person = new Person();
+            PersonViewModel personViewModel = new PersonViewModel(_repository)
+            {
+                PersonDetail = person,
+                RolesSelected = { }
+            };
 
+            return View(personViewModel);
+        }
+            
         // POST: Person/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -63,7 +74,13 @@ namespace PublisherScheduler01Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(person);
+            PersonViewModel personViewModel = new PersonViewModel(_repository)
+            {
+                PersonDetail = person,
+                RolesSelected = { }
+            };
+
+            return View(personViewModel);
         }
 
         // GET: Person/Edit/5
@@ -78,7 +95,7 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return HttpNotFound();
             }
-            PersonEditViewModel personEditViewModel = new PersonEditViewModel(_repository) { PersonDetail = person };
+            PersonViewModel personEditViewModel = new PersonViewModel(_repository) { PersonDetail = person };
 
             return View(personEditViewModel);
         }
@@ -95,7 +112,9 @@ namespace PublisherScheduler01Web.Controllers
                 _repository.PersonSaveChanges(person);
                 return RedirectToAction("Index");
             }
-            return View(person);
+            PersonViewModel personEditViewModel = new PersonViewModel(_repository) { PersonDetail = person };
+
+            return View(personEditViewModel);
         }
 
         // GET: Person/Delete/5
@@ -110,6 +129,7 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return HttpNotFound();
             }
+
             return View(person);
         }
 

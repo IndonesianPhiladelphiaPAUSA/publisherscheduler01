@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PublisherScheduler01Web.DataObjects.Assignment>
+﻿@model IEnumerable<PublisherScheduler01Web.ViewModels.AssignmentViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -12,13 +12,13 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.SlotId)
+            @Html.DisplayNameFor(model => model.SlotSelected)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TaskTypeId)
+            @Html.DisplayNameFor(model => model.TaskTypeSelected)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PersonId)
+            @Html.DisplayNameFor(model => model.PersonSelected)
         </th>
         <th></th>
     </tr>
@@ -26,18 +26,18 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.SlotId)
+            @Html.DisplayFor(modelItem => item.SlotSelected)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.TaskTypeId)
+            @Html.DisplayFor(modelItem => item.TaskTypeSelected)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.PersonId)
+            @Html.DisplayFor(modelItem => item.PersonSelected)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Edit", "Edit", new { id=item.AssignmentDetail.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.AssignmentDetail.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.AssignmentDetail.Id })
         </td>
     </tr>
 }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PublisherScheduler01Web.DataObjects.PersonAvail>
+﻿@model IEnumerable<PublisherScheduler01Web.ViewModels.PersonAvailViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -12,16 +12,16 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.UserId)
+            @Html.DisplayNameFor(model => model.PersonName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Begin)
+            @Html.DisplayNameFor(model => model.PersonAvailDetail.Begin)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.End)
+            @Html.DisplayNameFor(model => model.PersonAvailDetail.End)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IsAvailable)
+            @Html.DisplayNameFor(model => model.PersonAvailDetail.IsAvailable)
         </th>
         <th></th>
     </tr>
@@ -29,21 +29,21 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.UserId)
+            @Html.DisplayFor(modelItem => item.PersonName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Begin)
+            @Html.DisplayFor(modelItem => item.PersonAvailDetail.Begin)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.End)
+            @Html.DisplayFor(modelItem => item.PersonAvailDetail.End)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.IsAvailable)
+            @Html.DisplayFor(modelItem => item.PersonAvailDetail.IsAvailable)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Edit", "Edit", new { id=item.PersonAvailDetail.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.PersonAvailDetail.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.PersonAvailDetail.Id })
         </td>
     </tr>
 }

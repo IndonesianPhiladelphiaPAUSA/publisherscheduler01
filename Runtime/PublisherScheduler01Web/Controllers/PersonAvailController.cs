@@ -8,18 +8,36 @@ using System.Web;
 using System.Web.Mvc;
 using PublisherScheduler01Web.DataObjects;
 using PublisherScheduler01Web.Models;
+using PublisherScheduler01Web.Repositories;
+using PublisherScheduler01Web.ViewModels;
 
 namespace PublisherScheduler01Web.Controllers
 {
     [Authorize]
     public class PersonAvailController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ISchedulerRepository _repository;
 
+        public PersonAvailController(ISchedulerRepository repository)
+        {
+            _repository = repository;
+        }        
+        
         // GET: PersonAvail
         public ActionResult Index()
         {
-            return View(db.PersonAvails.ToList());
+            IList<PersonAvailViewModel> personAvailsVm = new List<PersonAvailViewModel>();
+
+            foreach (PersonAvail pa in _repository.GetPersonAvailabilities().ToList())
+            {
+                personAvailsVm.Add(new ViewModels.PersonAvailViewModel()
+                {
+                    PersonAvailDetail = pa,
+                    PersonName = _repository.GetPersonById(pa.UserId) == null ? "" : _repository.GetPersonById(pa.UserId).Name
+                });
+            }
+
+            return View(personAvailsVm);
         }
 
         // GET: PersonAvail/Details/5
@@ -29,12 +47,17 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PersonAvail personAvail = db.PersonAvails.Find(id);
+            PersonAvail personAvail = _repository.GetPersonAvailabilityById(id);
             if (personAvail == null)
             {
                 return HttpNotFound();
             }
-            return View(personAvail);
+
+            PersonAvailViewModel personAvailVm = new PersonAvailViewModel();
+            personAvailVm.PersonAvailDetail = personAvail;
+            personAvailVm.PersonName = _repository.GetPersonById(personAvail.UserId) == null ? "" : _repository.GetPersonById(personAvail.UserId).Name;
+
+            return View(personAvailVm);
         }
 
         // GET: PersonAvail/Create
@@ -52,8 +75,7 @@ namespace PublisherScheduler01Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.PersonAvails.Add(personAvail);
-                db.SaveChanges();
+                _repository.CreatePersonAvailability(personAvail);
                 return RedirectToAction("Index");
             }
 
@@ -67,7 +89,7 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PersonAvail personAvail = db.PersonAvails.Find(id);
+            PersonAvail personAvail = _repository.GetPersonAvailabilityById(id);
             if (personAvail == null)
             {
                 return HttpNotFound();
@@ -84,8 +106,7 @@ namespace PublisherScheduler01Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(personAvail).State = EntityState.Modified;
-                db.SaveChanges();
+                _repository.PersonAvailabilitySaveChanges(personAvail);
                 return RedirectToAction("Index");
             }
             return View(personAvail);
@@ -98,7 +119,7 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PersonAvail personAvail = db.PersonAvails.Find(id);
+            PersonAvail personAvail =  _repository.GetPersonAvailabilityById(id);
             if (personAvail == null)
             {
                 return HttpNotFound();
@@ -111,18 +132,12 @@ namespace PublisherScheduler01Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            PersonAvail personAvail = db.PersonAvails.Find(id);
-            db.PersonAvails.Remove(personAvail);
-            db.SaveChanges();
+            _repository.DeletePersonAvailability(id);
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
             base.Dispose(disposing);
         }
     }
