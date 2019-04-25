@@ -243,6 +243,7 @@
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\SlotController.cs" />
     <Compile Include="Controllers\TaskTypeController.cs" />
+    <Compile Include="DataObjects\Constants.cs" />
     <Compile Include="DataObjects\Location.cs" />
     <Compile Include="DataObjects\Capacity.cs" />
     <Compile Include="DataObjects\Slot.cs" />
@@ -268,6 +269,14 @@
     <Compile Include="Migrations\201904231422138_AddDataAnnotations.cs" />
     <Compile Include="Migrations\201904231422138_AddDataAnnotations.Designer.cs">
       <DependentUpon>201904231422138_AddDataAnnotations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904250109105_AddExternalLoginPublisherNameCongregationNo.cs" />
+    <Compile Include="Migrations\201904250109105_AddExternalLoginPublisherNameCongregationNo.Designer.cs">
+      <DependentUpon>201904250109105_AddExternalLoginPublisherNameCongregationNo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904250323515_AddedPersonSecurityLevelNullableInt.cs" />
+    <Compile Include="Migrations\201904250323515_AddedPersonSecurityLevelNullableInt.Designer.cs">
+      <DependentUpon>201904250323515_AddedPersonSecurityLevelNullableInt.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -375,6 +384,7 @@
     <Content Include="Views\Assignment\Details.cshtml" />
     <Content Include="Views\Assignment\Edit.cshtml" />
     <Content Include="Views\Assignment\Index.cshtml" />
+    <Content Include="Views\Person\CreateError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -404,6 +414,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904231422138_AddDataAnnotations.resx">
       <DependentUpon>201904231422138_AddDataAnnotations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904250109105_AddExternalLoginPublisherNameCongregationNo.resx">
+      <DependentUpon>201904250109105_AddExternalLoginPublisherNameCongregationNo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904250323515_AddedPersonSecurityLevelNullableInt.resx">
+      <DependentUpon>201904250323515_AddedPersonSecurityLevelNullableInt.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

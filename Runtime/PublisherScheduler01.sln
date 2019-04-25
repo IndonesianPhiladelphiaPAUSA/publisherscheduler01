@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublisherScheduler01Service", "PublisherScheduler01Service\PublisherScheduler01Service.csproj", "{209FA716-A7AD-4095-BD70-C8710FC66FA7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublisherScheduler01Web", "PublisherScheduler01Web\PublisherScheduler01Web.csproj", "{C65B1338-DA30-407B-A095-1B25F5EAAE12}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublisherScheduler01Data", "PublisherScheduler01Data\PublisherScheduler01Data.csproj", "{13A343B3-E198-4C19-A507-37E908CFC01A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{C65B1338-DA30-407B-A095-1B25F5EAAE12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C65B1338-DA30-407B-A095-1B25F5EAAE12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C65B1338-DA30-407B-A095-1B25F5EAAE12}.Release|Any CPU.Build.0 = Release|Any CPU
-		{13A343B3-E198-4C19-A507-37E908CFC01A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{13A343B3-E198-4C19-A507-37E908CFC01A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{13A343B3-E198-4C19-A507-37E908CFC01A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{13A343B3-E198-4C19-A507-37E908CFC01A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -32,17 +32,10 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.IsActive, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(m => m.CongregationNo, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.CheckBoxFor(m => m.IsActive, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.IsActive, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.CreateDate, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.DateTimeFor(m => m.CreateDate, DateTime.Now).Date()
-            @Html.ValidationMessageFor(m => m.CreateDate, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(m => m.CongregationNo, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.CongregationNo, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">

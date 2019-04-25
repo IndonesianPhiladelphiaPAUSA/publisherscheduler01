@@ -10,13 +10,13 @@ namespace PublisherScheduler01Web.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
-        [Display(Name = "Name")]
+        [Required(ErrorMessage = "Please enter publisher's name")]
+        [Display(Name = "Publisher's Name")]
         public string PublisherName { get; set; }
 
-        public bool IsActive { get; set; }
-        public DateTime CreateDate { get; set; }
-
+        [Required(ErrorMessage = "Please enter congregation number")]
+        [Display(Name = "Congregation Number")]
+        public string CongregationNo { get; set; }
     }
 
     public class ExternalLoginListViewModel
@@ -88,6 +88,13 @@ namespace PublisherScheduler01Web.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "Please enter publisher's name")]
+        [Display(Name = "Publisher's Name")]
+        public string PublisherName { get; set; }
+
+        [Display(Name = "Congregation Number")]
+        public string CongregationNo { get; set; }
     }
 
     public class ResetPasswordViewModel

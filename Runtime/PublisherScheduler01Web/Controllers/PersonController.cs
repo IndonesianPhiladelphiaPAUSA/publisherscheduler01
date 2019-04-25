@@ -10,6 +10,7 @@ using PublisherScheduler01Web.Repositories;
 using PublisherScheduler01Web.DataObjects;
 using PublisherScheduler01Web.Models;
 using PublisherScheduler01Web.ViewModels;
+using System.Security.Claims;
 
 namespace PublisherScheduler01Web.Controllers
 {
@@ -42,7 +43,13 @@ namespace PublisherScheduler01Web.Controllers
                 return HttpNotFound();
             }
 
-            PersonViewModel personViewModel = new PersonViewModel(_repository) { PersonDetail = person };
+            PersonViewModel personViewModel = new PersonViewModel()
+            {
+                PersonDetail = person,
+                RolesSelected = GetRolesSelected(person),
+                RoleNamesSelected = GetRoleNamesSelected(person),
+                Capacities = GetCapacities(person)
+            };
 
             return View(personViewModel);
 
@@ -51,14 +58,58 @@ namespace PublisherScheduler01Web.Controllers
         // GET: Person/Create
         public ActionResult Create()
         {
-            Person person = new Person();
-            PersonViewModel personViewModel = new PersonViewModel(_repository)
+            try
             {
-                PersonDetail = person,
-                RolesSelected = { }
-            };
+                var publisherName = ((ClaimsIdentity)User.Identity).FindFirst("PublisherName");
 
-            return View(personViewModel);
+                // Find out if this publisher has a person record already
+                Person person = _repository.GetPersons().FirstOrDefault(p => p.Name == publisherName.Value);
+
+                if (person == null)
+                {
+                    // no record found, create a new person with that name
+                    person = new Person()
+                    {
+                        Name = publisherName.Value,
+                        IsActive = true,
+                        SecurityLevel = (int)Constants.SecurityLevel.User
+                    };
+                }
+                else
+                {
+                    // Cannot create other person if not authorized
+                    if (person.SecurityLevel == null || person.SecurityLevel > 2)
+                    {
+                        ViewBag.Message = "Not enough security level to create person";
+                        return View("CreateError");
+                    }
+                    else
+                    {
+                        // create a new person
+                        person = new Person()
+                        {
+                            IsActive = true,
+                            SecurityLevel = (int)Constants.SecurityLevel.User
+                        };
+                    }
+                }
+
+                PersonViewModel personViewModel = new PersonViewModel()
+                {
+                    PersonDetail = person,
+                    RolesSelected = GetRolesSelected(person),
+                    RoleNamesSelected = GetRoleNamesSelected(person),
+                    Capacities = GetCapacities(person)
+                };
+
+                return View(personViewModel);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Error : " + ex.Message;
+                return View("CreateError");
+            }
+
         }
             
         // POST: Person/Create
@@ -66,19 +117,19 @@ namespace PublisherScheduler01Web.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,IsActive")] Person person)
+        public ActionResult Create(PersonViewModel personViewModel)
         {
             if (ModelState.IsValid)
             {
-                _repository.CreatePerson(person);
+                personViewModel.PersonDetail.Capacities = new List<Capacity>();
+                foreach (var r in personViewModel.RolesSelected)
+                {
+                    Capacity newRole = _repository.GetRoleById(Convert.ToInt16(r));
+                    personViewModel.PersonDetail.Capacities.Add(newRole);
+                }
+                _repository.CreatePerson(personViewModel.PersonDetail);
                 return RedirectToAction("Index");
             }
-
-            PersonViewModel personViewModel = new PersonViewModel(_repository)
-            {
-                PersonDetail = person,
-                RolesSelected = { }
-            };
 
             return View(personViewModel);
         }
@@ -95,7 +146,13 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return HttpNotFound();
             }
-            PersonViewModel personEditViewModel = new PersonViewModel(_repository) { PersonDetail = person };
+            PersonViewModel personEditViewModel = new PersonViewModel()
+            {
+                PersonDetail = person,
+                RolesSelected = GetRolesSelected(person),
+                RoleNamesSelected = GetRoleNamesSelected(person),
+                Capacities = GetCapacities(person)
+            };
 
             return View(personEditViewModel);
         }
@@ -105,16 +162,21 @@ namespace PublisherScheduler01Web.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,IsActive")] Person person)
+        public ActionResult Edit(PersonViewModel personViewModel)
         {
             if (ModelState.IsValid)
             {
-                _repository.PersonSaveChanges(person);
+                personViewModel.PersonDetail.Capacities = new List<Capacity>();
+                foreach (var r in personViewModel.RolesSelected)
+                {
+                    Capacity newRole = _repository.GetRoleById(Convert.ToInt16(r));
+                    personViewModel.PersonDetail.Capacities.Add(newRole);
+                }
+                _repository.PersonSaveChanges(personViewModel.PersonDetail);
                 return RedirectToAction("Index");
             }
-            PersonViewModel personEditViewModel = new PersonViewModel(_repository) { PersonDetail = person };
 
-            return View(personEditViewModel);
+            return View(personViewModel);
         }
 
         // GET: Person/Delete/5
@@ -145,6 +207,60 @@ namespace PublisherScheduler01Web.Controllers
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
+        }
+
+
+        private string[] GetRolesSelected(Person person)
+        {
+            List<string> roles = new List<string>();
+
+            if (person.Capacities != null)
+            {
+                foreach (var role in person.Capacities)
+                {
+                    int? id = role.Id;
+                    roles.Add(id == null ? "" : role.Id.ToString());
+                }
+            }
+
+            return roles.ToArray();
+        }
+
+
+        ICollection<SelectListItem> GetCapacities (Person person)
+        {
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+
+            if (_repository != null)
+            {
+                var allRoles = _repository.GetRoles().ToList();
+
+
+                if (allRoles != null)
+                {
+                    foreach (var role in allRoles)
+                    {
+                        selectListItems.Add(new SelectListItem { Text = role.Name, Value = role.Id.ToString() });
+                    }
+
+                }
+            }
+
+            return selectListItems;
+        }
+        private string[] GetRoleNamesSelected(Person person)
+        {
+            List<string> roles = new List<string>();
+
+            if (person.Capacities != null)
+            {
+                foreach (var role in person.Capacities)
+                {
+                    roles.Add(role.Name);
+                }
+            }
+
+            return roles.ToArray();
         }
 
         private void PopulateRolesDropDownList(int? selectedRole = null)

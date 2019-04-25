@@ -225,7 +225,44 @@ namespace PublisherScheduler01Web.Repositories
 
         public void PersonSaveChanges(Person person)
         {
-            db.Entry(person).State = EntityState.Modified;
+            // using method in https://stackoverflow.com/questions/27176014/how-to-add-update-child-entities-when-updating-a-parent-entity-in-ef
+
+            var existingPerson = db.Persons
+                .Where(p => p.Id == person.Id)
+                .Include(p => p.Capacities)
+                .SingleOrDefault();
+
+            if (existingPerson != null)
+            {
+                // update parent
+                db.Entry(existingPerson).CurrentValues.SetValues(person);
+
+                // delete children
+                foreach (var existingRole in existingPerson.Capacities.ToList())
+                {
+                    if (!person.Capacities.Any(r => r.Id == existingRole.Id))
+                        existingPerson.Capacities.Remove(existingRole);
+                }
+                
+                // Update and Insert children
+                foreach (var role in person.Capacities)
+                {
+                    var existingRole = existingPerson.Capacities
+                        .Where(r => r.Id == role.Id)
+                        .SingleOrDefault();
+
+                    if (existingRole != null)
+                        // Update child
+                        db.Entry(existingRole).CurrentValues.SetValues(role);
+                    else
+                    {
+                        // Insert child
+                        var newRole = GetRoleById(role.Id);
+                        existingPerson.Capacities.Add(newRole);
+                    }
+                }
+            }
+            // db.Entry(person).State = EntityState.Modified;
             db.SaveChanges();
         }
 

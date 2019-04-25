@@ -12,7 +12,7 @@ namespace PublisherScheduler01Web.ViewModels
     {
         public DataObjects.PersonAvail PersonAvailDetail { get; set; }
 
-        [Display(Description = "Person: ")]
+        [Display(Name = "Person: ")]
         public string PersonName { get; set; }
     }
 }

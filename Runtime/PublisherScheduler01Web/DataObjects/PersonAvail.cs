@@ -14,6 +14,8 @@ namespace PublisherScheduler01Web.DataObjects
         public int UserId { get; set; }
         public DateTime Begin { get; set; }
         public DateTime End { get; set; }
+
+        [Display(Name ="Available?")]
         public bool IsAvailable { get; set; }
     }
 }
