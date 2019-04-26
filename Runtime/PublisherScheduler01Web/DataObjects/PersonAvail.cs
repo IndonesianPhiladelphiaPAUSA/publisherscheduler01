@@ -11,7 +11,7 @@ namespace PublisherScheduler01Web.DataObjects
     {
         [Key]
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public int PersonId { get; set; }
         public DateTime Begin { get; set; }
         public DateTime End { get; set; }
 

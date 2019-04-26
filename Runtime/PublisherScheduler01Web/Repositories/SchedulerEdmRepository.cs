@@ -13,16 +13,102 @@ namespace PublisherScheduler01Web.Repositories
 
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public void AssignmentSaveChanges(Assignment assignment)
+        #region GetAll Section
+        public IEnumerable<Assignment> GetAssignments()
         {
-            db.Entry(assignment).State = EntityState.Modified;
-            db.SaveChanges();
+            return db.Assignments.ToList();
         }
 
+        public IEnumerable<Capacity> GetRoles()
+        {
+            return db.Capacities.ToList();
+        }
+
+        public IEnumerable<Location> GetLocations()
+        {
+            return db.Locations.ToList();
+        }
+
+        public IEnumerable<Person> GetPersons()
+        {
+            return db.Persons.ToList();
+        }
+
+        public IEnumerable<PersonAvail> GetPersonAvailabilities()
+        {
+            return db.PersonAvails.ToList();
+        }
+
+        public IEnumerable<Slot> GetSlots()
+        {
+            return db.Slots.ToList();
+        }
+
+        public IEnumerable<TaskType> GetTaskTypes()
+        {
+            return db.TaskTypes.ToList();
+        }
+
+        #endregion
+
+        #region GetOne Section
+        public Assignment GetAssignmentById(int? id)
+        {
+            Assignment assignment = db.Assignments.Find(id);
+            return assignment;
+        }
+
+        public Capacity GetRoleById(int? id)
+        {
+            Capacity capacity = db.Capacities.Find(id);
+            return capacity;
+        }
+
+        public Person GetPersonById(int? id)
+        {
+            Person person = db.Persons.Find(id);
+            return person;
+        }
+
+        public PersonAvail GetPersonAvailabilityById(int? id)
+        {
+            PersonAvail personAvail = db.PersonAvails.Find(id);
+            return personAvail;
+        }
+
+        public Location GetLocationById(int? id)
+        {
+            Location location = db.Locations.Find(id);
+            return location;
+        }
+
+        public Slot GetSlotById(int? id)
+        {
+            Slot slot = db.Slots.Find(id);
+            return slot;
+        }
+
+
+        public TaskType GetTaskTypeById(int? id)
+        {
+            TaskType taskType = db.TaskTypes.Find(id);
+            return taskType;
+        }
+
+        #endregion
+
+        #region Create Section
         public void CreateAssignment(Assignment assignment)
         {
             db.Assignments.Add(assignment);
             db.SaveChanges();
+        }
+
+        public void CreateRole(Capacity capacity)
+        {
+            db.Capacities.Add(capacity);
+            db.SaveChanges();
+
         }
 
         public void CreateLocation(Location location)
@@ -44,13 +130,6 @@ namespace PublisherScheduler01Web.Repositories
 
         }
 
-        public void CreateRole(Capacity capacity)
-        {
-            db.Capacities.Add(capacity);
-            db.SaveChanges();
-
-        }
-
         public void CreateSlot(Slot slot)
         {
             db.Slots.Add(slot);
@@ -63,163 +142,24 @@ namespace PublisherScheduler01Web.Repositories
             db.SaveChanges();
         }
 
-        public void DeleteAssignment(int? id)
+        #endregion Create Section
+
+        #region Save Section
+        public void AssignmentSaveChanges(Assignment assignment)
         {
-            Assignment assignment = db.Assignments.Find(id);
-            if (assignment != null)
-            {
-                db.Assignments.Remove(assignment);
-                db.SaveChanges();
-            }
+            db.Entry(assignment).State = EntityState.Modified;
+            db.SaveChanges();
         }
 
-        public void DeleteLocation(int? id)
+        public void RoleSaveChanges(Capacity capacity)
         {
-            Location location = db.Locations.Find(id);
-            if (location != null)
-            {
-                db.Locations.Remove(location);
-                db.SaveChanges();
-            }
-        }
-
-        public void DeletePerson(int? id)
-        {
-            Person person = db.Persons.Find(id);
-            if (person != null)
-            {
-                db.Persons.Remove(person);
-                db.SaveChanges();
-            }
-        }
-
-        public void DeletePersonAvailability(int? id)
-        {
-            PersonAvail personAvail = db.PersonAvails.Find(id);
-            if (personAvail != null)
-            {
-                db.PersonAvails.Remove(personAvail);
-                db.SaveChanges();
-            }
-        }
-
-        public void DeleteRole(int? id)
-        {
-            Capacity capacity = db.Capacities.Find(id);
-            if (capacity != null)
-            {
-                db.Capacities.Remove(capacity);
-                db.SaveChanges();
-            }
-
-        }
-
-        public void DeleteSlot(int? id)
-        {
-            Slot slot = db.Slots.Find(id);
-            if (slot != null)
-            {
-                db.Slots.Remove(slot);
-                db.SaveChanges();
-            }
-        }
-
-        public void DeleteTaskType(int? id)
-        {
-            TaskType taskType = db.TaskTypes.Find(id);
-            if (taskType != null)
-            {
-                db.TaskTypes.Remove(taskType);
-                db.SaveChanges();
-            }
-        }
-
-        public Assignment GetAssignmentById(int? id)
-        {
-            Assignment assignment = db.Assignments.Find(id);
-            return assignment;
-        }
-
-        public IEnumerable<Assignment> GetAssignments()
-        {
-            return db.Assignments.ToList();
-        }
-
-        public IEnumerable<Location> GetLocations()
-        {
-            return db.Locations.ToList();
-        }
-
-        public Location GetLocationById(int? id)
-        {
-            Location location = db.Locations.Find(id);
-            return location;
-        }
-
-        public IEnumerable<PersonAvail> GetPersonAvailabilities()
-        {
-            return db.PersonAvails.ToList();
-        }
-
-        public PersonAvail GetPersonAvailabilityById(int? id)
-        {
-            PersonAvail personAvail = db.PersonAvails.Find(id);
-            return personAvail;
-        }
-
-        public Person GetPersonById(int? id)
-        {
-            Person person = db.Persons.Find(id);
-            return person;
-        }
-
-        public IEnumerable<Person> GetPersons()
-        {
-            return db.Persons.ToList();
-        }
-
-        public IEnumerable<Capacity> GetRoles()
-        {
-            return db.Capacities.ToList();
-        }
-
-        public Capacity GetRoleById(int? id)
-        {
-            Capacity capacity = db.Capacities.Find(id);
-            return capacity;
-        }
-
-        public Slot GetSlotById(int? id)
-        {
-            Slot slot = db.Slots.Find(id);
-            return slot;
-        }
-
-        public IEnumerable<Slot> GetSlots()
-        {
-            return db.Slots.ToList();
-        }
-
-        public TaskType GetTaskTypeById(int? id)
-        {
-            TaskType taskType = db.TaskTypes.Find(id);
-            return taskType;
-        }
-
-        public IEnumerable<TaskType> GetTaskTypes()
-        {
-            return db.TaskTypes.ToList();
+            db.Entry(capacity).State = EntityState.Modified;
+            db.SaveChanges();
         }
 
         public void LocationSaveChanges(Location location)
         {
             db.Entry(location).State = EntityState.Modified;
-            db.SaveChanges();
-        }
-
-        public void PersonAvailabilitySaveChanges(PersonAvail personAvail)
-        {
-            db.Entry(personAvail).State = EntityState.Modified;
             db.SaveChanges();
         }
 
@@ -243,7 +183,7 @@ namespace PublisherScheduler01Web.Repositories
                     if (!person.Capacities.Any(r => r.Id == existingRole.Id))
                         existingPerson.Capacities.Remove(existingRole);
                 }
-                
+
                 // Update and Insert children
                 foreach (var role in person.Capacities)
                 {
@@ -266,6 +206,114 @@ namespace PublisherScheduler01Web.Repositories
             db.SaveChanges();
         }
 
+        public void PersonAvailabilitySaveChanges(PersonAvail personAvail)
+        {
+            db.Entry(personAvail).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+
+        public void SlotSaveChanges(Slot slot)
+        {
+            db.Entry(slot).State = EntityState.Modified;
+            db.SaveChanges();
+
+        }
+
+        public void TaskTypeSaveChanges(TaskType taskType)
+        {
+            db.Entry(taskType).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+
+        #endregion Save Section
+
+        #region Delete Section
+        public void DeleteAssignment(int? id)
+        {
+            Assignment assignment = db.Assignments.Find(id);
+            if (assignment != null)
+            {
+                db.Assignments.Remove(assignment);
+                db.SaveChanges();
+            }
+        }
+
+        public void DeleteRole(int? id)
+        {
+            Capacity capacity = db.Capacities.Find(id);
+            if (capacity != null)
+            {
+                db.Capacities.Remove(capacity);
+                db.SaveChanges();
+            }
+
+        }
+
+        public void DeleteLocation(int? id)
+        {
+            Location location = db.Locations.Find(id);
+            if (location != null)
+            {
+                db.Locations.Remove(location);
+                db.SaveChanges();
+            }
+        }
+
+        public void DeletePerson(int? id)
+        {
+            Person person = db.Persons.Find(id);
+            if (person != null)
+            {
+                // delete assignments
+                foreach (var existingAssignment in db.Assignments.Where(a => a.PersonId == id).ToList())
+                {
+                    db.Assignments.Remove(existingAssignment);
+                }
+
+                // delete person availability
+                foreach (var existingAvailability in db.PersonAvails.Where(a => a.PersonId == id).ToList())
+                {
+                    db.PersonAvails.Remove(existingAvailability);
+                }
+
+                db.Persons.Remove(person);
+                db.SaveChanges();
+            }
+        }
+
+        public void DeletePersonAvailability(int? id)
+        {
+            PersonAvail personAvail = db.PersonAvails.Find(id);
+            if (personAvail != null)
+            {
+                db.PersonAvails.Remove(personAvail);
+                db.SaveChanges();
+            }
+        }
+
+        public void DeleteSlot(int? id)
+        {
+            Slot slot = db.Slots.Find(id);
+            if (slot != null)
+            {
+                db.Slots.Remove(slot);
+                db.SaveChanges();
+            }
+        }
+
+        public void DeleteTaskType(int? id)
+        {
+            TaskType taskType = db.TaskTypes.Find(id);
+            if (taskType != null)
+            {
+                db.TaskTypes.Remove(taskType);
+                db.SaveChanges();
+            }
+        }
+
+        #endregion Delete Section
+
+        #region Populate List Section
         public IQueryable<Location> PopulateLocationsDropDownList()
         {
             return db.Locations.OrderBy(l => l.Name);
@@ -291,24 +339,7 @@ namespace PublisherScheduler01Web.Repositories
             return db.TaskTypes.OrderBy(t => t.Name);
         }
 
-        public void RoleSaveChanges(Capacity capacity)
-        {
-            db.Entry(capacity).State = EntityState.Modified;
-            db.SaveChanges();
-        }
-
-        public void SlotSaveChanges(Slot slot)
-        {
-            db.Entry(slot).State = EntityState.Modified;
-            db.SaveChanges();
-
-        }
-
-        public void TaskTypeSaveChanges(TaskType taskType)
-        {
-            db.Entry(taskType).State = EntityState.Modified;
-            db.SaveChanges();
-        }
+        #endregion
 
     }
 }

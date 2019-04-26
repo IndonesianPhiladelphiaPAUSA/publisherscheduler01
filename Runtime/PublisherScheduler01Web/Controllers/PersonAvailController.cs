@@ -33,7 +33,7 @@ namespace PublisherScheduler01Web.Controllers
                 personAvailsVm.Add(new ViewModels.PersonAvailViewModel()
                 {
                     PersonAvailDetail = pa,
-                    PersonName = _repository.GetPersonById(pa.UserId) == null ? "" : _repository.GetPersonById(pa.UserId).Name
+                    PersonName = _repository.GetPersonById(pa.PersonId) == null ? "" : _repository.GetPersonById(pa.PersonId).Name
                 });
             }
 
@@ -53,10 +53,12 @@ namespace PublisherScheduler01Web.Controllers
                 return HttpNotFound();
             }
 
-            PersonAvailViewModel personAvailVm = new PersonAvailViewModel();
-            personAvailVm.PersonAvailDetail = personAvail;
-            personAvailVm.PersonName = _repository.GetPersonById(personAvail.UserId) == null ? "" : _repository.GetPersonById(personAvail.UserId).Name;
-
+            PersonAvailViewModel personAvailVm = new PersonAvailViewModel()
+            {
+                PersonAvailDetail = personAvail,
+                PersonName = _repository.GetPersonById(personAvail.PersonId) == null ? "" : _repository.GetPersonById(personAvail.PersonId).Name
+            };
+            
             return View(personAvailVm);
         }
 
@@ -71,15 +73,15 @@ namespace PublisherScheduler01Web.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,UserId,Begin,End,IsAvailable")] PersonAvail personAvail)
+        public ActionResult Create(PersonAvailViewModel personAvailViewModel)
         {
             if (ModelState.IsValid)
             {
-                _repository.CreatePersonAvailability(personAvail);
+                _repository.CreatePersonAvailability(personAvailViewModel.PersonAvailDetail);
                 return RedirectToAction("Index");
             }
 
-            return View(personAvail);
+            return View(personAvailViewModel);
         }
 
         // GET: PersonAvail/Edit/5

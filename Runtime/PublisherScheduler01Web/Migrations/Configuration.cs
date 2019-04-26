@@ -122,15 +122,15 @@ namespace PublisherScheduler01Web.Migrations
 
             var personAvails = new List<PersonAvail>
             {
-                new PersonAvail{UserId = persons.Where(p => p.Name == "Peter Subianto").ToList()[0].Id,
+                new PersonAvail{PersonId = persons.Where(p => p.Name == "Peter Subianto").ToList()[0].Id,
                     Begin = DateTime.Parse("2019-04-03 14:00:00"),
                     End = DateTime.Parse("2019-04-03 16:00:00"),
                     IsAvailable = true},
-                new PersonAvail{UserId = persons.Where(p => p.Name == "Keith Floyd").ToList()[0].Id,
+                new PersonAvail{PersonId = persons.Where(p => p.Name == "Keith Floyd").ToList()[0].Id,
                     Begin = DateTime.Parse("2019-04-03 14:00:00"),
                     End = DateTime.Parse("2019-04-03 16:00:00"),
                     IsAvailable = true},
-                new PersonAvail{UserId = persons.Where(p => p.Name == "Dawn Lancaster").ToList()[0].Id,
+                new PersonAvail{PersonId = persons.Where(p => p.Name == "Dawn Lancaster").ToList()[0].Id,
                     Begin = DateTime.Parse("2019-04-03 14:00:00"),
                     End = DateTime.Parse("2019-04-03 16:00:00"),
                     IsAvailable = false}
