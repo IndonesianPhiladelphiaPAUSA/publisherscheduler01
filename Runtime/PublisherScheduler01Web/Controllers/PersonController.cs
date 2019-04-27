@@ -225,8 +225,7 @@ namespace PublisherScheduler01Web.Controllers
 
             return roles.ToArray();
         }
-
-
+        
         ICollection<SelectListItem> GetCapacities (Person person)
         {
             List<SelectListItem> selectListItems = new List<SelectListItem>();
@@ -248,6 +247,7 @@ namespace PublisherScheduler01Web.Controllers
 
             return selectListItems;
         }
+
         private string[] GetRoleNamesSelected(Person person)
         {
             List<string> roles = new List<string>();

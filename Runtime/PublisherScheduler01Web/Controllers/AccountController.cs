@@ -17,9 +17,11 @@ namespace PublisherScheduler01Web.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext _context;
 
         public AccountController()
         {
+            _context = new ApplicationDbContext();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -75,7 +77,7 @@ namespace PublisherScheduler01Web.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -139,6 +141,9 @@ namespace PublisherScheduler01Web.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            ViewBag.Name = new SelectList(_context.Roles.Where(u => !u.Name.Contains("Administrator"))
+                .ToList(), "Name", "Name");
+
             return View();
         }
 
@@ -153,7 +158,7 @@ namespace PublisherScheduler01Web.Controllers
             {
                 var user = new ApplicationUser
                 {
-                    UserName = model.Email,
+                    UserName = model.UserName,
                     Email = model.Email,
                     PublisherName = model.PublisherName,
                     CongregationNo = "922740"
@@ -169,8 +174,16 @@ namespace PublisherScheduler01Web.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
+                    // 20190426 -PS- Assigning Role to user 
+                    await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
+                    // 20190426 -PS- Add roles
+
                     return RedirectToAction("Index", "Home");
                 }
+                // 20190426 -PS- Assigning Role to user 
+                ViewBag.Name = new SelectList(_context.Roles.Where(u => !u.Name.Contains("Administrator")).ToList(), "Name", "Name");
+                // 20190426 -PS- Add roles
+
                 AddErrors(result);
             }
 
@@ -375,9 +388,10 @@ namespace PublisherScheduler01Web.Controllers
                 }
                 var user = new ApplicationUser
                 {
-                    CongregationNo = model.CongregationNo,
-                    UserName = model.PublisherName,
-                    Email = model.Email
+                    Email = model.Email,
+                    UserName = model.UserName,
+                    PublisherName = model.PublisherName,
+                    CongregationNo = model.CongregationNo
                 };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)

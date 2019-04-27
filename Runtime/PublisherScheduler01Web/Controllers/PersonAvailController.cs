@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using PublisherScheduler01Web.DataObjects;
@@ -65,7 +66,23 @@ namespace PublisherScheduler01Web.Controllers
         // GET: PersonAvail/Create
         public ActionResult Create()
         {
-            return View();
+            var publisherName = ((ClaimsIdentity)User.Identity).FindFirst("PublisherName");
+
+            // Find out if this publisher has a person record already
+            Person person = _repository.GetPersons().FirstOrDefault(p => p.Name == publisherName.Value);
+
+            PersonAvailViewModel personAvailViewModel = new PersonAvailViewModel();
+            
+            if (person.SecurityLevel == Convert.ToInt16(Constants.SecurityLevel.User))
+            {
+                personAvailViewModel.PersonList = new List<SelectListItem>() { new SelectListItem() { Text = person.Name, Value = person.Id.ToString() } };
+            }
+            else
+            {
+                personAvailViewModel.PersonList = GetPersonsList();
+            }
+
+            return View(personAvailViewModel);
         }
 
         // POST: PersonAvail/Create
@@ -142,5 +159,27 @@ namespace PublisherScheduler01Web.Controllers
         {
             base.Dispose(disposing);
         }
+
+        ICollection<SelectListItem> GetPersonsList()
+        {
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+
+            if (_repository != null)
+            {
+                var allPersons = _repository.GetPersons().ToList();
+
+                if (allPersons != null)
+                {
+                    foreach (var role in allPersons)
+                    {
+                        selectListItems.Add(new SelectListItem { Text = role.Name, Value = role.Id.ToString() });
+                    }
+
+                }
+            }
+
+            return selectListItems;
+        }
+
     }
 }

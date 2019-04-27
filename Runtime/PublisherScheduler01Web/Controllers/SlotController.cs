@@ -61,7 +61,12 @@ namespace PublisherScheduler01Web.Controllers
         // GET: Slot/Create
         public ActionResult Create()
         {
-            return View();
+            SlotViewModel slotViewModel = new SlotViewModel()
+            {
+                LocationsAvailable = GetLocations()
+            };
+
+            return View(slotViewModel);
         }
 
         // POST: Slot/Create
@@ -69,15 +74,15 @@ namespace PublisherScheduler01Web.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Begin,End,LocationId,IsActive")] Slot slot)
+        public ActionResult Create(SlotViewModel slotViewModel)
         {
             if (ModelState.IsValid)
             {
-                _repository.CreateSlot(slot);
+                _repository.CreateSlot(slotViewModel.SlotDetail);
                 return RedirectToAction("Index");
             }
 
-            return View(slot);
+            return View(slotViewModel);
         }
 
         // GET: Slot/Edit/5
@@ -92,7 +97,13 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return HttpNotFound();
             }
-            return View(slot);
+
+            SlotViewModel slotViewModel = new SlotViewModel()
+            {
+                LocationsAvailable = GetLocations()
+            };
+
+            return View(slotViewModel);
         }
 
         // POST: Slot/Edit/5
@@ -100,14 +111,14 @@ namespace PublisherScheduler01Web.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Begin,End,LocationId,IsActive")] Slot slot)
+        public ActionResult Edit(SlotViewModel slotViewModel)
         {
             if (ModelState.IsValid)
             {
-                _repository.SlotSaveChanges(slot);
+                _repository.SlotSaveChanges(slotViewModel.SlotDetail);
                 return RedirectToAction("Index");
             }
-            return View(slot);
+            return View(slotViewModel);
         }
 
         // GET: Slot/Delete/5
@@ -122,7 +133,13 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return HttpNotFound();
             }
-            return View(slot);
+
+            SlotViewModel slotViewModel = new SlotViewModel()
+            {
+                SlotDetail = slot,
+                LocationName = _repository.GetLocationById(slot.LocationId).Name
+            };
+            return View(slotViewModel);
         }
 
         // POST: Slot/Delete/5
@@ -137,6 +154,28 @@ namespace PublisherScheduler01Web.Controllers
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
+        }
+
+        ICollection<SelectListItem> GetLocations()
+        {
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+
+            if (_repository != null)
+            {
+                var allLocations = _repository.GetLocations().ToList();
+
+
+                if (allLocations != null)
+                {
+                    foreach (var location in allLocations)
+                    {
+                        selectListItems.Add(new SelectListItem { Text = location.Name, Value = location.Id.ToString() });
+                    }
+
+                }
+            }
+
+            return selectListItems;
         }
 
     }

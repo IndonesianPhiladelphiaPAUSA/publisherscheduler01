@@ -30,7 +30,7 @@ namespace PublisherScheduler01Web.Migrations
                 new Capacity{Name="Pioneer"},
                 new Capacity{Name="Publisher"}
             };
-            capacities.ForEach(c => context.Capacities.Add(c));
+            capacities.ForEach(c => context.Capacities.AddOrUpdate(r => r.Name, c));
             context.SaveChanges();
 
             var tasktypes = new List<TaskType>
@@ -48,7 +48,7 @@ namespace PublisherScheduler01Web.Migrations
                     Capacities = (List<Capacity>)capacities.Where(c => (new List<string>() { "Elder", "MS", "Brother" }).Contains(c.Name)).ToList()
                 }
             };
-            tasktypes.ForEach(a => context.TaskTypes.Add(a));
+            tasktypes.ForEach(a => context.TaskTypes.AddOrUpdate(t => t.Name, a));
             context.SaveChanges();
 
             var locations = new List<Location>
@@ -56,7 +56,7 @@ namespace PublisherScheduler01Web.Migrations
                 new Location{Name = "Wing Phat", IsActive = true},
                 new Location{Name = "One Stop Market", IsActive = true}
             };
-            locations.ForEach(l => context.Locations.Add(l));
+            locations.ForEach(l => context.Locations.AddOrUpdate(c => c.Name, l));
             context.SaveChanges();
 
             var slots = new List<Slot>
@@ -102,22 +102,25 @@ namespace PublisherScheduler01Web.Migrations
                     IsActive = true,
                     LocationId = locations.Where(l => l.Name == "One Stop Market").ToList()[0].Id },
             };
-            slots.ForEach(s => context.Slots.Add(s));
+            slots.ForEach(s => context.Slots.AddOrUpdate(c => c.Name, s));
             context.SaveChanges();
 
             var persons = new List<Person>
             {
                 new Person{Name = "Peter Subianto",
                     IsActive = true,
-                    Capacities = (List<Capacity>)capacities.Where(c => (new List<string>() {"Elder","Brother","Pioneer","Publisher" }).Contains(c.Name)).ToList()},
+                    Capacities = (List<Capacity>)capacities.Where(c => (new List<string>() {"Elder","Brother","Pioneer","Publisher" }).Contains(c.Name)).ToList(),
+                    SecurityLevel = (int)Constants.SecurityLevel.User},
                 new Person{Name = "Keith Floyd",
                     IsActive = true,
-                    Capacities = (List<Capacity>)capacities.Where(c => (new List<string>() {"MS","Brother","Publisher" }).Contains(c.Name)).ToList()},
+                    Capacities = (List<Capacity>)capacities.Where(c => (new List<string>() {"MS","Brother","Publisher" }).Contains(c.Name)).ToList(),
+                    SecurityLevel = (int)Constants.SecurityLevel.Manager},
                 new Person{Name = "Dawn Lancaster",
                     IsActive = true,
-                    Capacities = (List<Capacity>)capacities.Where(c => (new List<string>() {"Sister","Pioneer","Publisher" }).Contains(c.Name)).ToList()}
+                    Capacities = (List<Capacity>)capacities.Where(c => (new List<string>() {"Sister","Pioneer","Publisher" }).Contains(c.Name)).ToList(),
+                    SecurityLevel = (int)Constants.SecurityLevel.User}
             };
-            persons.ForEach(p => context.Persons.Add(p));
+            persons.ForEach(p => context.Persons.AddOrUpdate(c => c.Name, p));
             context.SaveChanges();
 
             var personAvails = new List<PersonAvail>
@@ -135,7 +138,7 @@ namespace PublisherScheduler01Web.Migrations
                     End = DateTime.Parse("2019-04-03 16:00:00"),
                     IsAvailable = false}
             };
-            personAvails.ForEach(p => context.PersonAvails.Add(p));
+            personAvails.ForEach(p => context.PersonAvails.AddOrUpdate(c => new { c.PersonId, c.Begin, c.End }, p));
             context.SaveChanges();
 
             var assignments = new List<Assignment>
@@ -155,7 +158,7 @@ namespace PublisherScheduler01Web.Migrations
                     TaskTypeId = tasktypes.Where(a => a.Name == "Publisher").ToList()[0].Id,
                     PersonId = persons.Where(p => p.Name == "Keith Floyd").ToList()[0].Id}
             };
-            assignments.ForEach(s => context.Assignments.Add(s));
+            assignments.ForEach(s => context.Assignments.AddOrUpdate(c => new { c.PersonId, c.SlotId, c.TaskTypeId }, s));
             context.SaveChanges();
         }
     }

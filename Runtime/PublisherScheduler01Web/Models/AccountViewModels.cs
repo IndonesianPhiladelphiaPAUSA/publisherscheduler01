@@ -10,6 +10,10 @@ namespace PublisherScheduler01Web.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "Please enter User Name")]
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
+
         [Required(ErrorMessage = "Please enter publisher's name")]
         [Display(Name = "Publisher's Name")]
         public string PublisherName { get; set; }
@@ -58,9 +62,14 @@ namespace PublisherScheduler01Web.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+
+        // 20190426 -PS- Change to username
+        //[Display(Name = "Email")]
+        //[EmailAddress]
+        //public string Email { get; set; }
+        [Display(Name = "Username")]
+        public string UserName { get; set; }
+        // 20190426 -PS- Change to username
 
         [Required]
         [DataType(DataType.Password)]
@@ -79,6 +88,10 @@ namespace PublisherScheduler01Web.Models
         public string Email { get; set; }
 
         [Required]
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
+
+        [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
@@ -95,6 +108,10 @@ namespace PublisherScheduler01Web.Models
 
         [Display(Name = "Congregation Number")]
         public string CongregationNo { get; set; }
+
+        [Required]
+        [Display(Name = "User Role")]
+        public string UserRoles { get; set; }
     }
 
     public class ResetPasswordViewModel
