@@ -16,6 +16,8 @@ namespace PublisherScheduler01Web.ViewModels
         [Display(Name = "Location ")]
         public string LocationName { get; set; }
 
+        public string LocationIdString { get; set; }
+
         public ICollection<SelectListItem> LocationsAvailable { get; set; }
 
 

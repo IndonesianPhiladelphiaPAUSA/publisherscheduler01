@@ -30,10 +30,11 @@ namespace PublisherScheduler01Web.Controllers
 
             foreach (Slot s in _repository.GetSlots().ToList())
             {
+                var location = _repository.GetLocationById(s.LocationId);
                 slotsVm.Add(new ViewModels.SlotViewModel()
                 {
                     SlotDetail = s,
-                    LocationName = _repository.GetLocationById(s.Id) == null ? "" : _repository.GetLocationById(s.Id).Name 
+                    LocationName = location == null ? "" : location.Name 
                 });
             }
 
@@ -100,6 +101,8 @@ namespace PublisherScheduler01Web.Controllers
 
             SlotViewModel slotViewModel = new SlotViewModel()
             {
+                SlotDetail = slot,
+                LocationIdString = slot.LocationId.ToString(),
                 LocationsAvailable = GetLocations()
             };
 
