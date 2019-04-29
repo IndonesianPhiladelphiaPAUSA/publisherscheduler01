@@ -55,7 +55,7 @@ namespace PublisherScheduler01Web.Controllers
             }
             SlotViewModel slotVm = new SlotViewModel();
             slotVm.SlotDetail = slot;
-            slotVm.LocationName = _repository.GetLocationById(slot.Id).Name;
+            slotVm.LocationName = _repository.GetLocationById(slot.LocationId).Name;
             return View(slotVm);
         }
 

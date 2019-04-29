@@ -30,9 +30,12 @@ namespace PublisherScheduler01Web.Controllers
 
             foreach (Assignment a in _repository.GetAssignments())
             {
-                assignmentsVm.Add(new AssignmentViewModel(_repository)
+                assignmentsVm.Add(new AssignmentViewModel()
                 {
                     AssignmentDetail = a,
+                    SlotSelected = _repository.GetSlotById(a.SlotId).Name,
+                    TaskTypeSelected = _repository.GetTaskTypeById(a.TaskTypeId).Name,
+                    PersonSelected = _repository.GetPersonById(a.PersonId).Name,
                 });
             }
 
@@ -52,7 +55,16 @@ namespace PublisherScheduler01Web.Controllers
                 return HttpNotFound();
             }
 
-            AssignmentViewModel assignmentViewModel = new AssignmentViewModel(_repository) { AssignmentDetail = assignment };
+            Slot slot = _repository.GetSlotById(assignment.SlotId);
+            TaskType taskType = _repository.GetTaskTypeById(assignment.TaskTypeId);
+            Person person = _repository.GetPersonById(assignment.PersonId);
+            AssignmentViewModel assignmentViewModel = new AssignmentViewModel()
+            {
+                AssignmentDetail = assignment,
+                SlotSelected = slot == null ? "" : slot.Name,
+                TaskTypeSelected = taskType == null ? "" : taskType.Name,
+                PersonSelected = person == null ? "" : person.Name,
+            };
 
             return View(assignmentViewModel);
         }
@@ -60,7 +72,14 @@ namespace PublisherScheduler01Web.Controllers
         // GET: Assignment/Create
         public ActionResult Create()
         {
-            return View();
+            AssignmentViewModel assignmentViewModel = new AssignmentViewModel()
+            {
+                SlotsAvailable = GetAvailableSlots(),
+                TaskTypesAvailable = GetAvailableTaskTypes(),
+                PersonsAvailable = GetAvailablePersons()
+            };
+
+            return View(assignmentViewModel);
         }
 
         // POST: Assignment/Create
@@ -68,15 +87,13 @@ namespace PublisherScheduler01Web.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,SlotId,TaskTypeId,PersonId")] Assignment assignment)
+        public ActionResult Create(AssignmentViewModel assignmentViewModel)
         {
             if (ModelState.IsValid)
             {
-                _repository.CreateAssignment(assignment);
+                _repository.CreateAssignment(assignmentViewModel.AssignmentDetail);
                 return RedirectToAction("Index");
             }
-
-            AssignmentViewModel assignmentViewModel = new AssignmentViewModel(_repository) { AssignmentDetail = assignment };
 
             return View(assignmentViewModel);
         }
@@ -93,7 +110,23 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return HttpNotFound();
             }
-            AssignmentViewModel assignmentViewModel = new AssignmentViewModel(_repository) { AssignmentDetail = assignment };
+
+            Slot slot = _repository.GetSlotById(assignment.SlotId);
+            TaskType taskType = _repository.GetTaskTypeById(assignment.TaskTypeId);
+            Person person = _repository.GetPersonById(assignment.PersonId);
+            AssignmentViewModel assignmentViewModel = new AssignmentViewModel()
+            {
+                AssignmentDetail = assignment,
+                SlotSelected = slot == null ? "" : slot.Name,
+                TaskTypeSelected = taskType == null ? "" : taskType.Name,
+                PersonSelected = person == null ? "" : person.Name,
+                SlotIdString = assignment.SlotId.ToString(),
+                TaskTypeIdString = assignment.TaskTypeId.ToString(),
+                PersonIdString = assignment.PersonId.ToString(),
+                SlotsAvailable = GetAvailableSlots(),
+                TaskTypesAvailable = GetAvailableTaskTypes(),
+                PersonsAvailable = GetAvailablePersons()
+            };
 
             return View(assignmentViewModel);
         }
@@ -103,14 +136,13 @@ namespace PublisherScheduler01Web.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,SlotId,TaskTypeId,PersonId")] Assignment assignment)
+        public ActionResult Edit(AssignmentViewModel assignmentViewModel)
         {
             if (ModelState.IsValid)
             {
-                _repository.AssignmentSaveChanges(assignment);
+                _repository.AssignmentSaveChanges(assignmentViewModel.AssignmentDetail);
                 return RedirectToAction("Index");
             }
-            AssignmentViewModel assignmentViewModel = new AssignmentViewModel(_repository) { AssignmentDetail = assignment };
 
             return View(assignmentViewModel);
         }
@@ -127,7 +159,13 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return HttpNotFound();
             }
-            AssignmentViewModel assignmentViewModel = new AssignmentViewModel(_repository) { AssignmentDetail = assignment };
+            AssignmentViewModel assignmentViewModel = new AssignmentViewModel()
+            {
+                AssignmentDetail = assignment,
+                SlotSelected = _repository.GetSlotById(assignment.SlotId).Name,
+                TaskTypeSelected = _repository.GetTaskTypeById(assignment.TaskTypeId).Name,
+                PersonSelected = _repository.GetPersonById(assignment.PersonId).Name
+            };
 
             return View(assignmentViewModel);
         }
@@ -144,6 +182,57 @@ namespace PublisherScheduler01Web.Controllers
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
+        }
+
+        private ICollection<SelectListItem> GetAvailableSlots()
+        {
+            var allSlots = _repository.GetSlots().ToList();
+
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+
+            if (allSlots != null)
+            {
+                foreach (var slot in allSlots)
+                {
+                    selectListItems.Add(new SelectListItem { Text = slot.Name, Value = slot.Id.ToString() });
+                }
+            }
+
+            return selectListItems;
+        }
+
+        private ICollection<SelectListItem> GetAvailableTaskTypes()
+        {
+            var allTaskTypes = _repository.GetTaskTypes().ToList();
+
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+
+            if (allTaskTypes != null)
+            {
+                foreach (var taskType in allTaskTypes)
+                {
+                    selectListItems.Add(new SelectListItem { Text = taskType.Name, Value = taskType.Id.ToString() });
+                }
+            }
+
+            return selectListItems;
+        }
+
+        private ICollection<SelectListItem> GetAvailablePersons()
+        {
+            var allPersons = _repository.GetPersons().ToList();
+
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+
+            if (allPersons != null)
+            {
+                foreach (var person in allPersons)
+                {
+                    selectListItems.Add(new SelectListItem { Text = person.Name, Value = person.Id.ToString() });
+                }
+            }
+
+            return selectListItems;
         }
 
         private void PopulateSlotsDropDownList(int? selectedSlot = null)
