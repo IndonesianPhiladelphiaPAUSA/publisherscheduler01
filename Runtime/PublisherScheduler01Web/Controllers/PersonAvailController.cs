@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
-using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using PublisherScheduler01Web.DataObjects;
 using PublisherScheduler01Web.Models;
 using PublisherScheduler01Web.Repositories;
@@ -72,8 +71,20 @@ namespace PublisherScheduler01Web.Controllers
             Person person = _repository.GetPersons().FirstOrDefault(p => p.Name == publisherName.Value);
 
             PersonAvailViewModel personAvailViewModel = new PersonAvailViewModel();
-            
-            if (person.SecurityLevel == Convert.ToInt16(Constants.SecurityLevel.User))
+
+            //var user = User.Identity;
+            //    var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            //    var s = userManager.GetRoles(user.GetUserId());
+            //    if (s[0].ToString() == "Administrator")
+            //    {
+            //        return true;
+            //    }
+            //    else
+            //    {
+            //        return false;
+            //    }
+
+            if (person.SecurityLevel == Convert.ToInt16(PublisherScheduler01Web.DataObjects.Constants.SecurityLevel.User))
             {
                 personAvailViewModel.PersonList = new List<SelectListItem>() { new SelectListItem() { Text = person.Name, Value = person.Id.ToString() } };
             }

@@ -9,12 +9,20 @@ namespace PublisherScheduler01Web.DataObjects
     {
         public enum SecurityLevel
         {
-            Administrator,
-            Owner,
-            Manager,
-            Overseer,
-            Captain,
-            User
+            Administrator = 0,
+            Owner = 1,
+            Manager = 2,
+            Overseer = 3,
+            Captain = 4,
+            User = 5
+        }
+
+        public enum Congregations
+        {
+            Indonesian = 922740,
+            Ellsworth = 73510,
+            Italian = 119099,
+            Penrose = 73791
         } 
 
 

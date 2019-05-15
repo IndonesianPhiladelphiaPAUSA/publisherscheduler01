@@ -19,7 +19,7 @@ namespace PublisherScheduler01Web.DataObjects
         public int? SecurityLevel { get; set; }
 
         [Display(Description = "Role: ")]
-        public virtual ICollection<Capacity> Capacities { get; set; }
+        public virtual ICollection<Capacity> Roles { get; set; }
         public virtual ICollection<PersonAvail> PersonAvails { get; set; }
         public virtual ICollection<Assignment> Assignments { get; set; }
     }

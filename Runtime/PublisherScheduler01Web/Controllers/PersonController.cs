@@ -48,7 +48,7 @@ namespace PublisherScheduler01Web.Controllers
                 PersonDetail = person,
                 RolesSelected = GetRolesSelected(person),
                 RoleNamesSelected = GetRoleNamesSelected(person),
-                Capacities = GetCapacities(person)
+                Capacities = GetRoles(person)
             };
 
             return View(personViewModel);
@@ -71,8 +71,7 @@ namespace PublisherScheduler01Web.Controllers
                     person = new Person()
                     {
                         Name = publisherName.Value,
-                        IsActive = true,
-                        SecurityLevel = (int)Constants.SecurityLevel.User
+                        IsActive = true //, SecurityLevel = _repository.GetIdentityRoles().First(u => u.Name.Contains("User")).Name
                     };
                 }
                 else
@@ -88,8 +87,7 @@ namespace PublisherScheduler01Web.Controllers
                         // create a new person
                         person = new Person()
                         {
-                            IsActive = true,
-                            SecurityLevel = (int)Constants.SecurityLevel.User
+                            IsActive = true
                         };
                     }
                 }
@@ -99,7 +97,7 @@ namespace PublisherScheduler01Web.Controllers
                     PersonDetail = person,
                     RolesSelected = GetRolesSelected(person),
                     RoleNamesSelected = GetRoleNamesSelected(person),
-                    Capacities = GetCapacities(person)
+                    Capacities = GetRoles(person)
                 };
 
                 return View(personViewModel);
@@ -121,11 +119,11 @@ namespace PublisherScheduler01Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                personViewModel.PersonDetail.Capacities = new List<Capacity>();
+                personViewModel.PersonDetail.Roles = new List<Capacity>();
                 foreach (var r in personViewModel.RolesSelected)
                 {
                     Capacity newRole = _repository.GetRoleById(Convert.ToInt16(r));
-                    personViewModel.PersonDetail.Capacities.Add(newRole);
+                    personViewModel.PersonDetail.Roles.Add(newRole);
                 }
                 _repository.CreatePerson(personViewModel.PersonDetail);
                 return RedirectToAction("Index");
@@ -151,7 +149,7 @@ namespace PublisherScheduler01Web.Controllers
                 PersonDetail = person,
                 RolesSelected = GetRolesSelected(person),
                 RoleNamesSelected = GetRoleNamesSelected(person),
-                Capacities = GetCapacities(person)
+                Capacities = GetRoles(person)
             };
 
             return View(personEditViewModel);
@@ -166,11 +164,11 @@ namespace PublisherScheduler01Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                personViewModel.PersonDetail.Capacities = new List<Capacity>();
+                personViewModel.PersonDetail.Roles = new List<Capacity>();
                 foreach (var r in personViewModel.RolesSelected)
                 {
                     Capacity newRole = _repository.GetRoleById(Convert.ToInt16(r));
-                    personViewModel.PersonDetail.Capacities.Add(newRole);
+                    personViewModel.PersonDetail.Roles.Add(newRole);
                 }
                 _repository.PersonSaveChanges(personViewModel.PersonDetail);
                 return RedirectToAction("Index");
@@ -214,9 +212,9 @@ namespace PublisherScheduler01Web.Controllers
         {
             List<string> roles = new List<string>();
 
-            if (person.Capacities != null)
+            if (person.Roles != null)
             {
-                foreach (var role in person.Capacities)
+                foreach (var role in person.Roles)
                 {
                     int? id = role.Id;
                     roles.Add(id == null ? "" : role.Id.ToString());
@@ -226,7 +224,7 @@ namespace PublisherScheduler01Web.Controllers
             return roles.ToArray();
         }
         
-        ICollection<SelectListItem> GetCapacities (Person person)
+        ICollection<SelectListItem> GetRoles (Person person)
         {
             List<SelectListItem> selectListItems = new List<SelectListItem>();
 
@@ -252,9 +250,9 @@ namespace PublisherScheduler01Web.Controllers
         {
             List<string> roles = new List<string>();
 
-            if (person.Capacities != null)
+            if (person.Roles != null)
             {
-                foreach (var role in person.Capacities)
+                foreach (var role in person.Roles)
                 {
                     roles.Add(role.Name);
                 }

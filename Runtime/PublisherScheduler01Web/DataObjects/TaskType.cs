@@ -17,7 +17,8 @@ namespace PublisherScheduler01Web.DataObjects
         public string Name { get; set; }
         public bool IsActive { get; set; }
 
-        public virtual ICollection<Capacity> Capacities { get; set; }
+        [Display(Name = "Roles required")]
+        public virtual ICollection<Capacity> Roles { get; set; }
         public virtual ICollection<Assignment> Assignments { get; set; }
     }
 }

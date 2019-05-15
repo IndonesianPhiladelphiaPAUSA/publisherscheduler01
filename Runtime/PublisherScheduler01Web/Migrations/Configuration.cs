@@ -39,13 +39,13 @@ namespace PublisherScheduler01Web.Migrations
                 {
                     Name = "Publisher",
                     IsActive = true,
-                    Capacities = (List<Capacity>)capacities.Where(c => (new List<string>() { "Elder", "MS", "Brother", "Sister", "Pioneer", "Publisher" }).Contains(c.Name)).ToList()
+                    Roles = (List<Capacity>)capacities.Where(c => (new List<string>() { "Elder", "MS", "Brother", "Sister", "Pioneer", "Publisher" }).Contains(c.Name)).ToList()
                 },
                 new TaskType
                 {
                     Name = "Captain",
                     IsActive = true,
-                    Capacities = (List<Capacity>)capacities.Where(c => (new List<string>() { "Elder", "MS", "Brother" }).Contains(c.Name)).ToList()
+                    Roles = (List<Capacity>)capacities.Where(c => (new List<string>() { "Elder", "MS", "Brother" }).Contains(c.Name)).ToList()
                 }
             };
             tasktypes.ForEach(a => context.TaskTypes.AddOrUpdate(t => t.Name, a));
@@ -109,16 +109,13 @@ namespace PublisherScheduler01Web.Migrations
             {
                 new Person{Name = "Peter Subianto",
                     IsActive = true,
-                    Capacities = (List<Capacity>)capacities.Where(c => (new List<string>() {"Elder","Brother","Pioneer","Publisher" }).Contains(c.Name)).ToList(),
-                    SecurityLevel = (int)Constants.SecurityLevel.User},
+                    Roles = (List<Capacity>)capacities.Where(c => (new List<string>() {"Elder","Brother","Pioneer","Publisher" }).Contains(c.Name)).ToList()},
                 new Person{Name = "Keith Floyd",
                     IsActive = true,
-                    Capacities = (List<Capacity>)capacities.Where(c => (new List<string>() {"MS","Brother","Publisher" }).Contains(c.Name)).ToList(),
-                    SecurityLevel = (int)Constants.SecurityLevel.Manager},
+                    Roles = (List<Capacity>)capacities.Where(c => (new List<string>() {"MS","Brother","Publisher" }).Contains(c.Name)).ToList()},
                 new Person{Name = "Dawn Lancaster",
                     IsActive = true,
-                    Capacities = (List<Capacity>)capacities.Where(c => (new List<string>() {"Sister","Pioneer","Publisher" }).Contains(c.Name)).ToList(),
-                    SecurityLevel = (int)Constants.SecurityLevel.User}
+                    Roles = (List<Capacity>)capacities.Where(c => (new List<string>() {"Sister","Pioneer","Publisher" }).Contains(c.Name)).ToList()}
             };
             persons.ForEach(p => context.Persons.AddOrUpdate(c => c.Name, p));
             context.SaveChanges();

@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using PublisherScheduler01Web.DataObjects;
 using PublisherScheduler01Web.Models;
 
 namespace PublisherScheduler01Web.Controllers
@@ -141,7 +142,8 @@ namespace PublisherScheduler01Web.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            ViewBag.Name = new SelectList(_context.Roles.Where(u => !u.Name.Contains("Administrator"))
+            ViewBag.Name = new SelectList(_context.Roles.Where(u => !(u.Name.Contains("Administrator") || 
+            u.Name.Contains("Manager")))
                 .ToList(), "Name", "Name");
 
             return View();
@@ -178,7 +180,20 @@ namespace PublisherScheduler01Web.Controllers
                     await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
                     // 20190426 -PS- Add roles
 
-                    return RedirectToAction("Index", "Home");
+                    // 20190503 -PS- Also add user if not already created
+                    Person person = _context.Persons.ToList().FirstOrDefault(p => p.Name == model.PublisherName);
+                    if (person == null)
+                    {
+                        // no record found, create a new person with that name
+                        person = new Person()
+                        {
+                            Name = model.PublisherName,
+                            IsActive = true
+                        };
+                    }
+                    // 20190503 -PS- 
+
+                    return RedirectToAction("Index", "Person");
                 }
                 // 20190426 -PS- Assigning Role to user 
                 ViewBag.Name = new SelectList(_context.Roles.Where(u => !u.Name.Contains("Administrator")).ToList(), "Name", "Name");

@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
+using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using PublisherScheduler01Web.DataObjects;
 using PublisherScheduler01Web.Models;
 
@@ -47,6 +51,11 @@ namespace PublisherScheduler01Web.Repositories
         public IEnumerable<TaskType> GetTaskTypes()
         {
             return db.TaskTypes.ToList();
+        }
+
+        public IEnumerable<IdentityRole> GetIdentityRoles()
+        {
+            return db.Roles.ToList();
         }
 
         #endregion
@@ -169,7 +178,7 @@ namespace PublisherScheduler01Web.Repositories
 
             var existingPerson = db.Persons
                 .Where(p => p.Id == person.Id)
-                .Include(p => p.Capacities)
+                .Include(p => p.Roles)
                 .SingleOrDefault();
 
             if (existingPerson != null)
@@ -178,16 +187,16 @@ namespace PublisherScheduler01Web.Repositories
                 db.Entry(existingPerson).CurrentValues.SetValues(person);
 
                 // delete children
-                foreach (var existingRole in existingPerson.Capacities.ToList())
+                foreach (var existingRole in existingPerson.Roles.ToList())
                 {
-                    if (!person.Capacities.Any(r => r.Id == existingRole.Id))
-                        existingPerson.Capacities.Remove(existingRole);
+                    if (!person.Roles.Any(r => r.Id == existingRole.Id))
+                        existingPerson.Roles.Remove(existingRole);
                 }
 
                 // Update and Insert children
-                foreach (var role in person.Capacities)
+                foreach (var role in person.Roles)
                 {
-                    var existingRole = existingPerson.Capacities
+                    var existingRole = existingPerson.Roles
                         .Where(r => r.Id == role.Id)
                         .SingleOrDefault();
 
@@ -198,7 +207,7 @@ namespace PublisherScheduler01Web.Repositories
                     {
                         // Insert child
                         var newRole = GetRoleById(role.Id);
-                        existingPerson.Capacities.Add(newRole);
+                        existingPerson.Roles.Add(newRole);
                     }
                 }
             }
@@ -340,6 +349,20 @@ namespace PublisherScheduler01Web.Repositories
         }
 
         #endregion
+
+        #region User Claim Section
+        public string GetRole()
+        {
+            //var publisherName = ((ClaimsIdentity)User.Identity).FindFirst("PublisherName");
+
+            //var user = User.Identity;
+            //var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            //var s = userManager.GetRoles(user.GetUserId());
+
+            return "";
+        }
+        #endregion
+
 
     }
 }

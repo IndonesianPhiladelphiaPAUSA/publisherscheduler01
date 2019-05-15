@@ -237,6 +237,7 @@
     <Compile Include="Controllers\AssignmentController.cs" />
     <Compile Include="Controllers\CapacityController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Library.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PersonAvailController.cs" />
@@ -284,6 +285,10 @@
     <Compile Include="Migrations\201904260015398_PersonAvailRefactoringPersonId.Designer.cs">
       <DependentUpon>201904260015398_PersonAvailRefactoringPersonId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904300252099_RefactorPersonCapacityToRole.cs" />
+    <Compile Include="Migrations\201904300252099_RefactorPersonCapacityToRole.Designer.cs">
+      <DependentUpon>201904300252099_RefactorPersonCapacityToRole.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -296,6 +301,7 @@
     <Compile Include="ViewModels\PersonAvailViewModel.cs" />
     <Compile Include="ViewModels\PersonViewModel.cs" />
     <Compile Include="ViewModels\SlotViewModel.cs" />
+    <Compile Include="ViewModels\TaskTypeViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -432,6 +438,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904260015398_PersonAvailRefactoringPersonId.resx">
       <DependentUpon>201904260015398_PersonAvailRefactoringPersonId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904300252099_RefactorPersonCapacityToRole.resx">
+      <DependentUpon>201904300252099_RefactorPersonCapacityToRole.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

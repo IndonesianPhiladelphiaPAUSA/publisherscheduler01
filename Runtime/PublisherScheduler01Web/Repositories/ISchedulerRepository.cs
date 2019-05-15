@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity.EntityFramework;
 using PublisherScheduler01Web.DataObjects;
 
 namespace PublisherScheduler01Web.Repositories
@@ -58,6 +59,8 @@ namespace PublisherScheduler01Web.Repositories
         void DeleteTaskType(int? id);
         void TaskTypeSaveChanges(TaskType taskType);
 
+        // AspNet 
+        IEnumerable<IdentityRole> GetIdentityRoles();
 
         IQueryable<Location> PopulateLocationsDropDownList();
         IQueryable<TaskType> PopulateTaskTypesDropDownList();

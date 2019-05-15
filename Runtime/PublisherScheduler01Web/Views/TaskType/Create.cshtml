@@ -1,4 +1,4 @@
-﻿@model PublisherScheduler01Web.DataObjects.TaskType
+﻿@model PublisherScheduler01Web.ViewModels.TaskTypeViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -7,28 +7,37 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>TaskType</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.TaskTypeDetail.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.TaskTypeDetail.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TaskTypeDetail.Name, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="control-label col-md-2">Roles</div>
+            <div class="col-md-10">
+                @Html.ListBoxFor(model => model.RolesSelected,
+               Model.Roles,
+               new { htmlattributes = new { @class = "form-control" }, size = 10, style = "max-width:300px;width:100%;" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TaskTypeDetail.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <div class="checkbox">
-                    @Html.EditorFor(model => model.IsActive)
-                    @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.TaskTypeDetail.IsActive)
+                    @Html.ValidationMessageFor(model => model.TaskTypeDetail.IsActive, "", new { @class = "text-danger" })
                 </div>
             </div>
         </div>
