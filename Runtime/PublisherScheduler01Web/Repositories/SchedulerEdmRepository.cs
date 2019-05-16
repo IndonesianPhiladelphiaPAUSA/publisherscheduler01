@@ -15,7 +15,7 @@ namespace PublisherScheduler01Web.Repositories
     public class SchedulerEdmRepository : ISchedulerRepository
     {
 
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private SchedulerDbContext db = new SchedulerDbContext();
 
         #region GetAll Section
         public IEnumerable<Assignment> GetAssignments()

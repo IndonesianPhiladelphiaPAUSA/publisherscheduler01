@@ -242,7 +242,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PersonAvailController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
-    <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\AspNetRoleController.cs" />
     <Compile Include="Controllers\SlotController.cs" />
     <Compile Include="Controllers\TaskTypeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -290,9 +290,9 @@
       <DependentUpon>201904300252099_RefactorPersonCapacityToRole.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\SchedulerDbContext.cs" />
+    <Compile Include="ViewModels\AccountViewModels.cs" />
+    <Compile Include="ViewModels\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ISchedulerRepository.cs" />
     <Compile Include="Repositories\SchedulerEdmRepository.cs" />
@@ -301,6 +301,7 @@
     <Compile Include="ViewModels\PersonAvailViewModel.cs" />
     <Compile Include="ViewModels\PersonViewModel.cs" />
     <Compile Include="ViewModels\SlotViewModel.cs" />
+    <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\TaskTypeViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -442,6 +443,12 @@
     <EmbeddedResource Include="Migrations\201904300252099_RefactorPersonCapacityToRole.resx">
       <DependentUpon>201904300252099_RefactorPersonCapacityToRole.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PublisherSchedulerIdentity\PublisherSchedulerIdentity.csproj">
+      <Project>{02d2a9c5-5a2d-4ec1-aaa4-cfaae86bc62f}</Project>
+      <Name>PublisherSchedulerIdentity</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

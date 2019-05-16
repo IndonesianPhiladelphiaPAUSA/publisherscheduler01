@@ -9,7 +9,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using PublisherScheduler01Web.DataObjects;
+using PublisherScheduler01Web.ViewModels;
 using PublisherScheduler01Web.Models;
+using PublisherSchedulerIdentity;
 
 namespace PublisherScheduler01Web.Controllers
 {
@@ -18,11 +20,11 @@ namespace PublisherScheduler01Web.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private ApplicationDbContext _context;
+        private SchedulerDbContext _context;
 
         public AccountController()
         {
-            _context = new ApplicationDbContext();
+            _context = new SchedulerDbContext();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -82,6 +84,13 @@ namespace PublisherScheduler01Web.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    // 20190515 -PS- Add claim
+                    var person = _context.Persons.Where(p => p.Name == model.UserName).FirstOrDefault<Person>();
+                    if (person != null)
+                    {
+                        UserManager.AddClaim(model.UserName, new Claim("PublisherName", person.Name));
+                    }
+
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -163,7 +172,7 @@ namespace PublisherScheduler01Web.Controllers
                     UserName = model.UserName,
                     Email = model.Email,
                     PublisherName = model.PublisherName,
-                    CongregationNo = "922740"
+                    CongregationNo = PublisherScheduler01Web.DataObjects.Constants.Congregations.Indonesian.ToString()
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -175,6 +184,9 @@ namespace PublisherScheduler01Web.Controllers
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                    // 20190515 -PS- Add Claim
+                    await UserManager.AddClaimAsync(user.UserName, new Claim("PublisherName", user.PublisherName));
 
                     // 20190426 -PS- Assigning Role to user 
                     await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);

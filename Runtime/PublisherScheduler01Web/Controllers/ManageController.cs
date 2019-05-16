@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using PublisherScheduler01Web.Models;
+using PublisherScheduler01Web.ViewModels;
 
 namespace PublisherScheduler01Web.Controllers
 {

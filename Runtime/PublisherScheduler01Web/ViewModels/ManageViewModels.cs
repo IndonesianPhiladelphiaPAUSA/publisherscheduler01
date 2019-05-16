@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
-namespace PublisherScheduler01Web.Models
+namespace PublisherScheduler01Web.ViewModels
 {
     public class IndexViewModel
     {

@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using PublisherScheduler01Web.DataObjects;
-using PublisherScheduler01Web.Models;
 using PublisherScheduler01Web.Repositories;
 using PublisherScheduler01Web.ViewModels;
 

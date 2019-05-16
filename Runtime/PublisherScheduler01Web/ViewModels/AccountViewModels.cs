@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace PublisherScheduler01Web.Models
+namespace PublisherScheduler01Web.ViewModels
 {
     public class ExternalLoginConfirmationViewModel
     {

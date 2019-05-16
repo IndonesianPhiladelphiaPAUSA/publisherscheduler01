@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using PublisherScheduler01Web.Models;
+using PublisherSchedulerIdentity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,9 @@ using System.Web.Mvc;
 namespace PublisherScheduler01Web.Controllers
 {
     [Authorize]
-    public class RoleController : Controller
+    public class AspNetRoleController : Controller
     {
-        ApplicationDbContext context = new ApplicationDbContext();
+        SchedulerDbContext context = new SchedulerDbContext();
         
         // GET: Role
         public ActionResult Index()

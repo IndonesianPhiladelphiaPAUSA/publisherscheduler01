@@ -8,14 +8,14 @@ namespace PublisherScheduler01Web.Migrations
     using System.Diagnostics;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<PublisherScheduler01Web.Models.ApplicationDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<PublisherScheduler01Web.Models.SchedulerDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(PublisherScheduler01Web.Models.ApplicationDbContext context)
+        protected override void Seed(PublisherScheduler01Web.Models.SchedulerDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 
