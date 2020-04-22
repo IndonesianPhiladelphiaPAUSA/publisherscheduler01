@@ -1,4 +1,4 @@
-﻿@model PublisherScheduler01Web.DataObjects.Assignment
+﻿@model PublisherScheduler01Web.ViewModels.AssignmentViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -10,34 +10,37 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Assignment</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.AssignmentDetail.Id)
+        @Html.HiddenFor(model => model.AssignmentDetail.SlotId)
+        @Html.HiddenFor(model => model.AssignmentDetail.TaskTypeId)
+        @Html.HiddenFor(model => model.AssignmentDetail.PersonId)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.SlotId, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.AssignmentDetail.SlotId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.SlotId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SlotId, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(model => model.SlotIdString, Model.SlotsAvailable, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AssignmentDetail.SlotId, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.TaskTypeId, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.AssignmentDetail.TaskTypeId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.TaskTypeId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TaskTypeId, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(model => model.TaskTypeIdString, Model.TaskTypesAvailable, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AssignmentDetail.TaskTypeId, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.PersonId, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.AssignmentDetail.PersonId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.PersonId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PersonId, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(model => model.PersonIdString, Model.PersonsAvailable, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AssignmentDetail.PersonId, "", new { @class = "text-danger" })
             </div>
         </div>
 

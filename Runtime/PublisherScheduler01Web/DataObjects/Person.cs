@@ -16,10 +16,10 @@ namespace PublisherScheduler01Web.DataObjects
         [Display(Description = "Full name: ")]
         public string Name { get; set; }
         public bool IsActive { get; set; }
+        public int? SecurityLevel { get; set; }
 
-        [Required(ErrorMessage = "Please select person's role")]
         [Display(Description = "Role: ")]
-        public virtual ICollection<Capacity> Capacities { get; set; }
+        public virtual ICollection<Capacity> Roles { get; set; }
         public virtual ICollection<PersonAvail> PersonAvails { get; set; }
         public virtual ICollection<Assignment> Assignments { get; set; }
     }

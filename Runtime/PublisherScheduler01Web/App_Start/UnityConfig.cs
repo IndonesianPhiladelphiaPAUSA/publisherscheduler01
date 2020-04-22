@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using PublisherScheduler01Web.Controllers;
 using PublisherScheduler01Web.Models;
 using PublisherScheduler01Web.Repositories;
+using PublisherSchedulerIdentity;
 using System;
 using System.Data.Entity;
 using Unity;

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using PublisherScheduler01Web.DataObjects;
 
 namespace PublisherScheduler01Web.ViewModels
@@ -12,7 +13,9 @@ namespace PublisherScheduler01Web.ViewModels
     {
         public DataObjects.PersonAvail PersonAvailDetail { get; set; }
 
-        [Display(Description = "Person: ")]
+        [Display(Name = "Person: ")]
         public string PersonName { get; set; }
+
+        public ICollection<SelectListItem> PersonList { get; set; }
     }
 }

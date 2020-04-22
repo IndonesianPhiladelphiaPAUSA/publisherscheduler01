@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
+using System.Security.Claims;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using PublisherScheduler01Web.DataObjects;
-using PublisherScheduler01Web.Models;
 using PublisherScheduler01Web.Repositories;
 using PublisherScheduler01Web.ViewModels;
 
@@ -33,7 +32,7 @@ namespace PublisherScheduler01Web.Controllers
                 personAvailsVm.Add(new ViewModels.PersonAvailViewModel()
                 {
                     PersonAvailDetail = pa,
-                    PersonName = _repository.GetPersonById(pa.UserId) == null ? "" : _repository.GetPersonById(pa.UserId).Name
+                    PersonName = _repository.GetPersonById(pa.PersonId) == null ? "" : _repository.GetPersonById(pa.PersonId).Name
                 });
             }
 
@@ -53,17 +52,47 @@ namespace PublisherScheduler01Web.Controllers
                 return HttpNotFound();
             }
 
-            PersonAvailViewModel personAvailVm = new PersonAvailViewModel();
-            personAvailVm.PersonAvailDetail = personAvail;
-            personAvailVm.PersonName = _repository.GetPersonById(personAvail.UserId) == null ? "" : _repository.GetPersonById(personAvail.UserId).Name;
-
+            PersonAvailViewModel personAvailVm = new PersonAvailViewModel()
+            {
+                PersonAvailDetail = personAvail,
+                PersonName = _repository.GetPersonById(personAvail.PersonId) == null ? "" : _repository.GetPersonById(personAvail.PersonId).Name
+            };
+            
             return View(personAvailVm);
         }
 
         // GET: PersonAvail/Create
         public ActionResult Create()
         {
-            return View();
+            var publisherName = ((ClaimsIdentity)User.Identity).FindFirst("PublisherName");
+
+            // Find out if this publisher has a person record already
+            Person person = _repository.GetPersons().FirstOrDefault(p => p.Name == publisherName.Value);
+
+            PersonAvailViewModel personAvailViewModel = new PersonAvailViewModel();
+
+            //var user = User.Identity;
+            //    var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            //    var s = userManager.GetRoles(user.GetUserId());
+            //    if (s[0].ToString() == "Administrator")
+            //    {
+            //        return true;
+            //    }
+            //    else
+            //    {
+            //        return false;
+            //    }
+
+            if (person.SecurityLevel == Convert.ToInt16(PublisherScheduler01Web.DataObjects.Constants.SecurityLevel.User))
+            {
+                personAvailViewModel.PersonList = new List<SelectListItem>() { new SelectListItem() { Text = person.Name, Value = person.Id.ToString() } };
+            }
+            else
+            {
+                personAvailViewModel.PersonList = GetPersonsList();
+            }
+
+            return View(personAvailViewModel);
         }
 
         // POST: PersonAvail/Create
@@ -71,15 +100,15 @@ namespace PublisherScheduler01Web.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,UserId,Begin,End,IsAvailable")] PersonAvail personAvail)
+        public ActionResult Create(PersonAvailViewModel personAvailViewModel)
         {
             if (ModelState.IsValid)
             {
-                _repository.CreatePersonAvailability(personAvail);
+                _repository.CreatePersonAvailability(personAvailViewModel.PersonAvailDetail);
                 return RedirectToAction("Index");
             }
 
-            return View(personAvail);
+            return View(personAvailViewModel);
         }
 
         // GET: PersonAvail/Edit/5
@@ -140,5 +169,27 @@ namespace PublisherScheduler01Web.Controllers
         {
             base.Dispose(disposing);
         }
+
+        ICollection<SelectListItem> GetPersonsList()
+        {
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+
+            if (_repository != null)
+            {
+                var allPersons = _repository.GetPersons().ToList();
+
+                if (allPersons != null)
+                {
+                    foreach (var role in allPersons)
+                    {
+                        selectListItems.Add(new SelectListItem { Text = role.Name, Value = role.Id.ToString() });
+                    }
+
+                }
+            }
+
+            return selectListItems;
+        }
+
     }
 }

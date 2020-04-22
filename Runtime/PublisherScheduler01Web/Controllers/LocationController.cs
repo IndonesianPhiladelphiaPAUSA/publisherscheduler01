@@ -14,7 +14,7 @@ namespace PublisherScheduler01Web.Controllers
     [Authorize]
     public class LocationController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private SchedulerDbContext db = new SchedulerDbContext();
 
         // GET: Location
         public ActionResult Index()
