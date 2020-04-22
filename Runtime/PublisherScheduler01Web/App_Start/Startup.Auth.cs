@@ -6,6 +6,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using PublisherScheduler01Web.Models;
+using PublisherSchedulerIdentity;
 
 namespace PublisherScheduler01Web
 {

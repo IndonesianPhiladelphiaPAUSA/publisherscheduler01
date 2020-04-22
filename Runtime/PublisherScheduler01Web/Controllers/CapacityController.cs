@@ -8,18 +8,25 @@ using System.Web;
 using System.Web.Mvc;
 using PublisherScheduler01Web.DataObjects;
 using PublisherScheduler01Web.Models;
+using PublisherScheduler01Web.Repositories;
+using PublisherScheduler01Web.ViewModels;
 
 namespace PublisherScheduler01Web.Controllers
 {
     [Authorize]
     public class CapacityController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ISchedulerRepository _repository;
+
+        public CapacityController(ISchedulerRepository repository)
+        {
+            _repository = repository;
+        }
 
         // GET: Capacity
         public ActionResult Index()
         {
-            return View(db.Capacities.ToList());
+            return View(_repository.GetRoles());
         }
 
         // GET: Capacity/Details/5
@@ -29,7 +36,7 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Capacity capacity = db.Capacities.Find(id);
+            Capacity capacity = _repository.GetRoleById(id);
             if (capacity == null)
             {
                 return HttpNotFound();
@@ -48,16 +55,15 @@ namespace PublisherScheduler01Web.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] Capacity capacity)
+        public ActionResult Create(RoleViewModel roleViewModel)
         {
             if (ModelState.IsValid)
             {
-                db.Capacities.Add(capacity);
-                db.SaveChanges();
+                _repository.CreateRole(new Capacity() { Name = roleViewModel.Name });
                 return RedirectToAction("Index");
             }
 
-            return View(capacity);
+            return View(roleViewModel);
         }
 
         // GET: Capacity/Edit/5
@@ -67,12 +73,18 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Capacity capacity = db.Capacities.Find(id);
-            if (capacity == null)
+            Capacity role = _repository.GetRoleById(id);
+            if (role == null)
             {
                 return HttpNotFound();
             }
-            return View(capacity);
+            RoleViewModel roleViewModel = new RoleViewModel
+            {
+                RoleDetail = role,
+                Name = role.Name
+            };
+
+            return View(roleViewModel);
         }
 
         // POST: Capacity/Edit/5
@@ -80,15 +92,19 @@ namespace PublisherScheduler01Web.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name")] Capacity capacity)
+        public ActionResult Edit(RoleViewModel roleViewModel)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(capacity).State = EntityState.Modified;
-                db.SaveChanges();
+                Capacity role = _repository.GetRoleById(roleViewModel.RoleDetail.Id);
+                if (role == null)
+                {
+                    return HttpNotFound();
+                }
+                _repository.RoleSaveChanges(roleViewModel.RoleDetail);
                 return RedirectToAction("Index");
             }
-            return View(capacity);
+            return View(roleViewModel);
         }
 
         // GET: Capacity/Delete/5
@@ -98,12 +114,13 @@ namespace PublisherScheduler01Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Capacity capacity = db.Capacities.Find(id);
-            if (capacity == null)
+            Capacity role = _repository.GetRoleById(id);
+            if (role == null)
             {
                 return HttpNotFound();
             }
-            return View(capacity);
+
+            return View(role);
         }
 
         // POST: Capacity/Delete/5
@@ -111,18 +128,12 @@ namespace PublisherScheduler01Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Capacity capacity = db.Capacities.Find(id);
-            db.Capacities.Remove(capacity);
-            db.SaveChanges();
+            _repository.DeleteRole(id);
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
             base.Dispose(disposing);
         }
     }

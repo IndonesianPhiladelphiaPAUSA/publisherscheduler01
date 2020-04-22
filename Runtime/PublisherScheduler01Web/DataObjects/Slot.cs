@@ -25,5 +25,6 @@ namespace PublisherScheduler01Web.DataObjects
         public bool IsActive { get; set; }
 
         public virtual ICollection<Assignment> Assignments { get; set; }
+
     }
 }
